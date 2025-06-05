@@ -63,7 +63,7 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
             id: data.incidencia.id.toString(),
             name: `Incidência em ${data.cidade.nome}`,
             anual: data.incidencia.anual,
-            description: `Incidência solar anual: ${data.incidencia.anual} Wh/m²/dia`
+            description: `Anual: ${data.incidencia.anual} Wh/m²/dia`
           }
         };
         
