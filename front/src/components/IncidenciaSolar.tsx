@@ -58,6 +58,14 @@ const IncidenciaSolar: React.FC = () => {
     return value.toLocaleString('pt-BR');
   };
 
+  // Get color description based on annual value
+  const getValueCategory = (value: number): string => {
+    if (value < 4000) return 'baixa';
+    if (value < 5000) return 'média';
+    if (value < 6000) return 'alta';
+    return 'muito alta';
+  };
+
   if (!visible || !incidenciaData) {
     return null;
   }
@@ -74,14 +82,18 @@ const IncidenciaSolar: React.FC = () => {
         <IncidenciaCard>
           <CityName>{incidenciaData.cidade.nome}</CityName>
           
-          {/* Modern Single-line Display */}
+          {/* Modern Single-line Display with Dynamic Color */}
           <MeterDisplay>
-            <MeterDigit>{formatAnnualValue(incidenciaData.incidencia.anual)}</MeterDigit>
-            <MeterUnit>Wh/m²/dia</MeterUnit>
+            <MeterDigit value={incidenciaData.incidencia.anual}>
+              {formatAnnualValue(incidenciaData.incidencia.anual)}
+            </MeterDigit>
+            <MeterUnit value={incidenciaData.incidencia.anual}>
+              Wh/m²/dia • Incidência {getValueCategory(incidenciaData.incidencia.anual)}
+            </MeterUnit>
           </MeterDisplay>
           
           <details>
-            <MonthsToggle>Leituras Mensais</MonthsToggle>
+            <MonthsToggle>Detalhes Mensais</MonthsToggle>
             <MonthsGrid>
               {/* Monthly bar chart with color-changing values */}
               <MonthMeter>
