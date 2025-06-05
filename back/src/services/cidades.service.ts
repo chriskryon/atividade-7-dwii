@@ -39,7 +39,8 @@ export const cidadeService = {
         SELECT
 					i.id, i.lon, i.lat, i.anual,
 					i.jan, i.fev, i.mar, i.abr, i.mai, i.jun, i.jul, i.ago, i.set, i.out, i.nov, i.dez, 
-					ST_AsGeoJSON(i.geom) as geom
+					ST_AsGeoJSON(i.geom) as geom,
+					ST_AsGeoJSON(ST_Centroid(i.geom)) as centroid_geom
         FROM incidencias i
 				JOIN cidades c ON ST_Intersects(i.geom, c.geom)
 				WHERE c.id = $1
@@ -83,6 +84,7 @@ export const cidadeService = {
 						dez: incidencia.dez,
 					},
 					geom: JSON.parse(incidencia.geom),
+					centroid_geom: JSON.parse(incidencia.centroid_geom),
 				},
 			};
 		} catch (error) {

@@ -67,6 +67,14 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
           }
         };
         
+        // Dispatch event to add polygon to map
+        const event = new CustomEvent('updateIncidenciaPolygon', {
+          detail: {
+            feature: feature,
+            center: data.incidencia.centroid_geom ? data.incidencia.centroid_geom.coordinates : null
+          }
+        });
+        window.dispatchEvent(event);
       }
     } catch (error) {
       console.error("Erro ao buscar dados de incidência:", error);

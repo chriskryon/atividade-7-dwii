@@ -26,6 +26,10 @@ export interface IncidenciaData {
 			type: string;
 			coordinates: number[][][];
 		};
+		centroid_geom?: {
+			type: string;
+			coordinates: number[];
+		};
 	};
 	mensagem?: string;
 }
