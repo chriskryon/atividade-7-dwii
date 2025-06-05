@@ -2,82 +2,99 @@ import styled from "styled-components";
 
 export const MenuContainer = styled.div`
   position: absolute;
+  left: 20px;
   top: 50%;
-  right: 20px;
-  z-index: 10;
   transform: translateY(-50%);
-  background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 16px;
-  width: 280px;
+  width: 320px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 20px;
+  z-index: 10;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  &:hover {
+    box-shadow: 0 12px 42px rgba(0, 0, 0, 0.12);
+  }
 `;
 
-export const MenuTitle = styled.h3`
-  margin: 0 0 16px 0;
-  color: #2c3e50;
-  font-size: 18px;
+export const MenuTitle = styled.h2`
+  font-size: 22px;
   font-weight: 600;
-  text-align: center;
+  margin: 0 0 16px 0;
+  color: #333;
+  letter-spacing: -0.5px;
 `;
 
 export const StyledSelect = styled.select`
   width: 100%;
-  padding: 12px;
-  margin-bottom: 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  background-color: white;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(200, 200, 200, 0.4);
+  background: rgba(255, 255, 255, 0.8);
   font-size: 15px;
-  color: #4a5568;
+  color: #333;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a0aec0'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+
+  &:hover {
+    border-color: rgba(170, 170, 170, 0.6);
+  }
+
   &:focus {
     outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
   }
+
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
 `;
 
 export const SearchButton = styled.button`
   width: 100%;
-  padding: 12px;
-  background: linear-gradient(to right, #3498db, #2980b9);
-  color: white;
+  height: 42px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, #0066cc, #0052a2);
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 16px;
   transition: all 0.2s ease;
-  
-  &:hover {
-    background: linear-gradient(to right, #2980b9, #2471a3);
+  box-shadow: 0 2px 10px rgba(0, 102, 204, 0.25);
+
+  &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 14px rgba(0, 102, 204, 0.35);
   }
-  
-  &:active {
+
+  &:active:not(:disabled) {
     transform: translateY(0);
   }
-  
+
   &:disabled {
-    background: #cbd5e0;
+    background: linear-gradient(135deg, #b4b4b4, #cccccc);
     cursor: not-allowed;
-    transform: none;
+    opacity: 0.7;
     box-shadow: none;
   }
 `;
 
 export const NoticeBanner = styled.div`
   margin-top: 16px;
-  padding: 12px;
-  background-color: #fff3cd;
-  border-radius: 6px;
-  color: #856404;
-  text-align: center;
+  padding: 12px 16px;
+  background: rgba(255, 82, 82, 0.1);
+  border-left: 4px solid #ff5252;
+  border-radius: 8px;
+  color: #d32f2f;
+  font-size: 14px;
 `;

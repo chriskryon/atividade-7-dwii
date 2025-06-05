@@ -2,129 +2,234 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   position: absolute;
-  bottom: 20px;
+  top: 90px;
   right: 20px;
+  width: 380px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 20px;
   z-index: 10;
-  background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 16px;
-  width: 320px;
-  max-height: 400px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: 0 12px 42px rgba(0, 0, 0, 0.12);
+  }
 `;
 
-export const Title = styled.h3`
-  margin: 0 0 12px 0;
-  color: #2c3e50;
-  font-size: 18px;
+export const Title = styled.h2`
+  font-size: 22px;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23f39c12'%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Cline x1='12' y1='1' x2='12' y2='3'/%3E%3Cline x1='12' y1='21' x2='12' y2='23'/%3E%3Cline x1='4.22' y1='4.22' x2='5.64' y2='5.64'/%3E%3Cline x1='18.36' y1='18.36' x2='19.78' y2='19.78'/%3E%3Cline x1='1' y1='12' x2='3' y2='12'/%3E%3Cline x1='21' y1='12' x2='23' y2='12'/%3E%3Cline x1='4.22' y1='19.78' x2='5.64' y2='18.36'/%3E%3Cline x1='18.36' y1='5.64' x2='19.78' y2='4.22'/%3E%3C/svg%3E");
-    background-size: contain;
-  }
+  margin: 0 0 16px 0;
+  color: #333;
+  text-align: center;
+  letter-spacing: -0.5px;
 `;
 
 export const CloseButton = styled.button`
   position: absolute;
   top: 12px;
   right: 12px;
-  background: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(230, 230, 230, 0.5);
   border: none;
-  font-size: 18px;
+  font-size: 20px;
+  color: #666;
   cursor: pointer;
-  color: #cbd5e0;
-  
+  transition: all 0.2s ease;
+
   &:hover {
-    color: #a0aec0;
+    background: rgba(200, 200, 200, 0.8);
+    color: #333;
+  }
+
+  &:focus {
+    outline: none;
   }
 `;
 
 export const IncidenciaCard = styled.div`
+  border-radius: 12px;
+  background: rgba(250, 250, 250, 0.5);
+  padding: 16px;
+  margin-top: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+`;
+
+export const CityName = styled.h3`
+  font-size: 20px;
+  font-weight: 500;
+  color: #111;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.5px;
+  text-align: center;
+`;
+
+// Modern digital display - updated to single-line design
+export const MeterDisplay = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+  padding: 20px 24px;
+  background: linear-gradient(120deg, #f8faff 0%, #e6eaf0 100%);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.04),
+    0 2px 4px rgba(0, 0, 0, 0.02);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(200, 210, 220, 0.3);
+`;
+
+export const MeterDigit = styled.span`
+  display: inline;
+  color: #1a73e8;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 42px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  position: relative;
+`;
+
+export const MeterUnit = styled.div`
+  color: #637381;
+  font-size: 14px;
+  font-weight: 500;
   margin-top: 10px;
-  padding: 15px;
-  background-color: #f0f9ff;
-  border-radius: 6px;
-  border-left: 4px solid #3498db;
-`;
-
-export const CityName = styled.h4`
-  margin: 0 0 10px 0;
-  color: #2b6cb0;
-  font-weight: 600;
-`;
-
-export const AnualValue = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
-  padding: 10px;
-  background: linear-gradient(to right, #f6d365 0%, #fda085 100%);
-  border-radius: 6px;
-  color: white;
   
-  span:first-child {
-    font-weight: 600;
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #1a73e8;
+    border-radius: 50%;
     margin-right: 8px;
-  }
-  
-  span:last-child {
-    font-size: 20px;
-    font-weight: 700;
+    opacity: 0.6;
   }
 `;
 
 export const MonthsToggle = styled.summary`
   cursor: pointer;
-  padding: 8px 4px;
+  font-size: 15px;
   font-weight: 500;
-  color: #4a5568;
-  
-  &:hover {
-    color: #3182ce;
-  }
+  color: #0066CC;
+  margin: 12px 0;
+  padding: 8px;
+  user-select: none;
 `;
 
 export const MonthsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  animation: fadeIn 0.3s ease-in-out;
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 `;
 
-export const MonthCard = styled.div`
-  background-color: #edf2f7;
-  border-radius: 4px;
-  padding: 8px;
-  text-align: center;
+// New monthly bar meter styles
+export const MonthMeter = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 28px;
 `;
 
-export const MonthName = styled.div`
+export const MonthLabel = styled.div`
+  width: 40px;
   font-size: 13px;
-  color: #718096;
-  margin-bottom: 4px;
+  font-weight: 500;
+  color: #666;
 `;
 
-export const MonthValue = styled.div`
+export const MonthBar = styled.div`
+  flex: 1;
+  height: 16px;
+  background: #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 0 10px;
+  position: relative;
+`;
+
+export const MonthBarFill = styled.div<{ percent: number }>`
+  height: 100%;
+  width: ${(props) => props.percent}%;
+  background: ${(props) =>
+		`linear-gradient(90deg, 
+      #FFD54F 0%, 
+      #FF9800 ${Math.min(50, props.percent)}%, 
+      #FF5722 ${Math.min(75, props.percent)}%, 
+      #D32F2F ${Math.min(100, props.percent)}%
+    )`};
+  border-radius: 8px;
+  transition: width 1s cubic-bezier(0.23, 1, 0.32, 1);
+`;
+
+export const MonthBarValue = styled.div<{ value: number; maxValue: number }>`
+  width: 70px;
+  font-size: 12px;
   font-weight: 600;
-  color: #2d3748;
+  color: ${(props) => {
+		const ratio = props.value / props.maxValue;
+		if (ratio < 0.3) return "#333";
+		if (ratio < 0.5) return "#D97900";
+		if (ratio < 0.7) return "#D95700";
+		if (ratio < 0.9) return "#D93600";
+		return "#D01B00";
+	}};
+  text-align: right;
+  
+  &::after {
+    content: ' Wh/m²';
+    font-size: 10px;
+    color: #777;
+    margin-left: 2px;
+  }
 `;
 
 export const NoDataMessage = styled.div`
-  padding: 15px;
-  background-color: #fff3cd;
-  border-radius: 6px;
-  color: #856404;
+  padding: 20px;
   text-align: center;
-  font-weight: 500;
+  color: #666;
+  font-size: 15px;
+  font-style: italic;
+  background: rgba(242, 242, 242, 0.5);
+  border-radius: 12px;
+  margin-top: 16px;
+`;
+
+// Keep existing styles that might be needed...
+export const AnualValue = styled.div`
+  /* Keep if needed for other components */
+`;
+
+export const MonthCard = styled.div`
+  /* Keep if needed for other components */
+`;
+
+export const MonthName = styled.div`
+  /* Keep if needed for other components */
+`;
+
+export const MonthValue = styled.div`
+  /* Keep if needed for other components */
 `;
