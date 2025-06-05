@@ -12,9 +12,9 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNmNW0iLCJhIjoiY204ZDRyOWIyMGxuMjJyb3g5a
 const Mapa: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [lng, setLng] = useState(-46.6333);  // Longitude padrão (São Paulo)
-  const [lat, setLat] = useState(-23.5505);  // Latitude padrão (São Paulo)
-  const [zoom, setZoom] = useState(10);
+  const [lng, setLng] = useState(-46.6333);
+  const [lat, setLat] = useState(-23.5505);
+  const [zoom, setZoom] = useState(12);
   const [selectedCidade, setSelectedCidade] = useState<number | null>(null);
   
   const { mapData, fetchMapData } = useMapContext();
@@ -83,7 +83,7 @@ const Mapa: React.FC = () => {
 
       // Adiciona interatividade
       map.current.on('click', 'spatial-data-layer', (e) => {
-        if (e.features && e.features[0]) {
+        if (e.features?. [0]) {
           const feature = e.features[0];
           new mapboxgl.Popup()
             .setLngLat([e.lngLat.lng, e.lngLat.lat])
