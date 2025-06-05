@@ -1,6 +1,6 @@
 import type React from 'react';
 import { createContext, useState, useContext, type ReactNode } from 'react'
-import type { MapData, MapContextType } from '../interfaces/Map';
+import type { MapData, MapContextType } from '../types/map.types';
 import api from '../services/api';
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
