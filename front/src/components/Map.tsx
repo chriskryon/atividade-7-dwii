@@ -5,6 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { MapContainer, MapWrapper } from '../styles/MapContainer';
 import { useMapContext } from '../contexts/MapContext';
 import CidadesMenu from './CidadesMenu';
+import IncidenciaSolar from './IncidenciaSolar';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNmNW0iLCJhIjoiY204ZDRyOWIyMGxuMjJyb3g5a2I5djliZyJ9.M5B_cljHLFcGD_HOC4bJdg';
 
@@ -122,6 +123,7 @@ const Mapa: React.FC = () => {
   return (
     <MapContainer>
       <CidadesMenu onCidadeSelect={handleCidadeSelect} selectedCidade={selectedCidade} />
+      <IncidenciaSolar />
       {mapData.error && <div className="error-message">{mapData.error}</div>}
       <MapWrapper ref={mapContainer} />
       <div className="map-info">

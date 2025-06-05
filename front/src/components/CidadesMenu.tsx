@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios'; // Make sure axios is installed
+import axios from 'axios';
 import { useMapContext } from '../contexts/MapContext';
 import { cidades as cidadesData } from '../utils/cidades';
 import type { Cidade } from '../types/cidades.types';
@@ -45,99 +45,95 @@ interface IncidenciaData {
 
 const MenuContainer = styled.div`
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 50%;
+  right: 20px;
   z-index: 10;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  padding: 10px;
-  max-height: 70vh;
-  overflow-y: auto;
-  width: 250px;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  width: 280px;
 `;
 
 const MenuTitle = styled.h3`
-  margin: 0 0 10px 0;
-  color: #333;
-  font-size: 16px;
+  margin: 0 0 16px 0;
+  color: #2c3e50;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
 `;
 
-const CidadesList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  max-height: calc(70vh - 40px);
-  overflow-y: auto;
-`;
-
-const CidadeItem = styled.li<{ selected: boolean }>`
-  padding: 8px 10px;
-  margin-bottom: 4px;
-  cursor: pointer;
-  border-radius: 3px;
-  background-color: ${props => props.selected ? '#3498db' : 'transparent'};
-  color: ${props => props.selected ? 'white' : '#333'};
-  
-  &:hover {
-    background-color: ${props => props.selected ? '#3498db' : '#f0f0f0'};
-  }
-`;
-
-const SearchInput = styled.input`
+const StyledSelect = styled.select`
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
-`;
-
-const LoadingMessage = styled.div`
-  padding: 10px;
-  text-align: center;
-  color: #666;
-`;
-
-const ErrorMessage = styled.div`
-  padding: 10px;
-  text-align: center;
-  color: #e74c3c;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 15px;
+  color: #4a5568;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a0aec0'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  
+  &:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+  }
 `;
 
 const SearchButton = styled.button`
   width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  background-color: #3498db;
+  padding: 12px;
+  background: linear-gradient(to right, #3498db, #2980b9);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.2s ease;
   
   &:hover {
-    background-color: #2980b9;
+    background: linear-gradient(to right, #2980b9, #2471a3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:active {
+    transform: translateY(0);
   }
   
   &:disabled {
-    background-color: #95a5a6;
+    background: #cbd5e0;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
+`;
+
+const NoticeBanner = styled.div`
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #fff3cd;
+  border-radius: 6px;
+  color: #856404;
+  text-align: center;
 `;
 
 const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidade }) => {
   const [cidades, setCidades] = useState<Cidade[]>([]);
-  const [filteredCidades, setFilteredCidades] = useState<Cidade[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [incidenciaData, setIncidenciaData] = useState<IncidenciaData | null>(null);
   const [fetchingIncidencia, setFetchingIncidencia] = useState(false);
-  const { setNewGeometryData } = useMapContext(); // Assume this context method exists to update map data
+  const { setNewGeometryData } = useMapContext();
 
   useEffect(() => {
-    // Load cities from local data instead of API
+    // Load cities from local data
     try {
       const formattedCidades = cidadesData.map(cidade => ({
         id: cidade.id,
@@ -148,28 +144,19 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
         }
       }));
       setCidades(formattedCidades);
-      setFilteredCidades(formattedCidades);
     } catch (err) {
       setError('Erro ao carregar a lista de cidades');
       console.error('Erro ao carregar cidades:', err);
     }
   }, []);
 
-  useEffect(() => {
-    // Fix the infinite loop by not having filteredCidades depend on cidades changes
-    if (searchTerm && cidades.length > 0) {
-      const filtered = cidades.filter(cidade => 
-        cidade.nome.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredCidades(filtered);
-    } else if (cidades.length > 0) {
-      setFilteredCidades(cidades);
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const cidadeId = Number(e.target.value);
+    const selectedCity = cidades.find(c => c.id === cidadeId);
+    
+    if (selectedCity) {
+      onCidadeSelect(cidadeId, selectedCity.geometry.coordinates as [number, number]);
     }
-  }, [searchTerm]);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const term = e.target.value;
-    setSearchTerm(term);
   };
   
   const handleBuscarClick = async () => {
@@ -177,8 +164,6 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
       console.log("Nenhuma cidade selecionada");
       return;
     }
-    
-    console.log("ID da cidade selecionada:", selectedCidade);
     
     try {
       setFetchingIncidencia(true);
@@ -188,11 +173,13 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
       const data: IncidenciaData = response.data;
       
       console.log("Dados de incidência:", data);
-      setIncidenciaData(data);
+      // Pass data to parent component or context to be displayed in the IncidenciaSolar component
+      if (window.dispatchEvent) {
+        window.dispatchEvent(new CustomEvent('incidenciaData', { detail: data }));
+      }
       
       // If there's incidence data with geometry, plot it on the map
       if (data.incidencia?.geom) {
-        // Convert to GeoJSON feature to plot on map
         const feature = {
           type: "Feature",
           geometry: data.incidencia.geom,
@@ -204,7 +191,6 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
           }
         };
         
-        // Send the new geometry to the map context to be displayed
         setNewGeometryData([feature]);
       }
     } catch (error) {
@@ -218,64 +204,31 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
   return (
     <MenuContainer>
       <MenuTitle>Cidades do Brasil</MenuTitle>
-      <SearchInput 
-        type="text" 
-        placeholder="Buscar cidade..." 
-        value={searchTerm}
-        onChange={handleSearch}
-      />
+      
+      <StyledSelect 
+        value={selectedCidade || ''} 
+        onChange={handleSelectChange}
+      >
+        <option value="">Selecione uma cidade</option>
+        {cidades.map(cidade => (
+          <option key={cidade.id} value={cidade.id}>
+            {cidade.nome}
+          </option>
+        ))}
+      </StyledSelect>
       
       <SearchButton 
         onClick={handleBuscarClick}
         disabled={!selectedCidade || fetchingIncidencia}
       >
-        {fetchingIncidencia ? 'Buscando...' : 'Buscar'}
+        {fetchingIncidencia ? 'Buscando...' : 'Buscar Dados de Incidência'}
       </SearchButton>
       
-      {incidenciaData && incidenciaData.incidencia && (
-        <div style={{ margin: '10px 0', padding: '10px', backgroundColor: '#f0f8ff', borderRadius: '4px' }}>
-          <h4 style={{ margin: '0 0 5px 0' }}>Incidência Solar em {incidenciaData.cidade.nome}</h4>
-          <p style={{ margin: '0 0 5px 0' }}>Anual: {incidenciaData.incidencia.anual} Wh/m²/dia</p>
-          <details>
-            <summary>Dados mensais</summary>
-            <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
-              <li>Jan: {incidenciaData.incidencia.mensal.jan}</li>
-              <li>Fev: {incidenciaData.incidencia.mensal.fev}</li>
-              <li>Mar: {incidenciaData.incidencia.mensal.mar}</li>
-              <li>Abr: {incidenciaData.incidencia.mensal.abr}</li>
-              <li>Mai: {incidenciaData.incidencia.mensal.mai}</li>
-              <li>Jun: {incidenciaData.incidencia.mensal.jun}</li>
-              <li>Jul: {incidenciaData.incidencia.mensal.jul}</li>
-              <li>Ago: {incidenciaData.incidencia.mensal.ago}</li>
-              <li>Set: {incidenciaData.incidencia.mensal.set}</li>
-              <li>Out: {incidenciaData.incidencia.mensal.out}</li>
-              <li>Nov: {incidenciaData.incidencia.mensal.nov}</li>
-              <li>Dez: {incidenciaData.incidencia.mensal.dez}</li>
-            </ul>
-          </details>
-        </div>
+      {error && (
+        <NoticeBanner>
+          {error}
+        </NoticeBanner>
       )}
-      
-      {incidenciaData?.mensagem && (
-        <div style={{ margin: '10px 0', padding: '10px', backgroundColor: '#fff3cd', borderRadius: '4px' }}>
-          {incidenciaData.mensagem}
-        </div>
-      )}
-      
-      <CidadesList>
-        {filteredCidades.map(cidade => (
-          <CidadeItem 
-            key={cidade.id}
-            selected={selectedCidade === cidade.id}
-            onClick={() => onCidadeSelect(cidade.id, cidade.geometry.coordinates as [number, number])}
-          >
-            {cidade.nome}
-          </CidadeItem>
-        ))}
-        {filteredCidades.length === 0 && !loading && (
-          <LoadingMessage>Nenhuma cidade encontrada</LoadingMessage>
-        )}
-      </CidadesList>
     </MenuContainer>
   );
 };

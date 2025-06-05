@@ -63,6 +63,7 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
   );
 };
 
+
 export const useMapContext = (): MapContextType => {
   const context = useContext(MapContext);
   

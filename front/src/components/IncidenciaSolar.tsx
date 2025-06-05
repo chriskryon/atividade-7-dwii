@@ -1,4 +1,5 @@
-import React from 'react';
+import type React from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 interface IncidenciaData {
@@ -33,194 +34,229 @@ interface IncidenciaData {
   mensagem?: string;
 }
 
-interface IncidenciaSolarProps {
-  data: IncidenciaData | null;
-  onClose: () => void;
-}
-
 const Container = styled.div`
   position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  width: 90%;
-  max-width: 700px;
-  padding: 20px;
-  z-index: 100;
-  color: #333;
-`;
-
-const Header = styled.div`
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  width: 320px;
+  max-height: 400px;
+  overflow-y: auto;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 10px;
+  flex-direction: column;
 `;
 
-const Title = styled.h2`
-  margin: 0;
+const Title = styled.h3`
+  margin: 0 0 12px 0;
   color: #2c3e50;
-  font-size: 1.5rem;
+  font-size: 18px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   
-  svg {
-    margin-right: 10px;
-    color: #e67e22;
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23f39c12'%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Cline x1='12' y1='1' x2='12' y2='3'/%3E%3Cline x1='12' y1='21' x2='12' y2='23'/%3E%3Cline x1='4.22' y1='4.22' x2='5.64' y2='5.64'/%3E%3Cline x1='18.36' y1='18.36' x2='19.78' y2='19.78'/%3E%3Cline x1='1' y1='12' x2='3' y2='12'/%3E%3Cline x1='21' y1='12' x2='23' y2='12'/%3E%3Cline x1='4.22' y1='19.78' x2='5.64' y2='18.36'/%3E%3Cline x1='18.36' y1='5.64' x2='19.78' y2='4.22'/%3E%3C/svg%3E");
+    background-size: contain;
   }
 `;
 
 const CloseButton = styled.button`
+  position: absolute;
+  top: 12px;
+  right: 12px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 18px;
   cursor: pointer;
-  color: #95a5a6;
-  transition: color 0.2s;
+  color: #cbd5e0;
   
   &:hover {
-    color: #e74c3c;
+    color: #a0aec0;
   }
 `;
 
-const AnualDisplay = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+const IncidenciaCard = styled.div`
+  margin-top: 10px;
   padding: 15px;
-  border-radius: 8px;
-  color: white;
-`;
-
-const Label = styled.div`
-  font-weight: bold;
-  margin-right: 15px;
-`;
-
-const Value = styled.div`
-  font-size: 2.2rem;
-  font-weight: bold;
-`;
-
-const Unit = styled.div`
-  margin-left: 10px;
-  align-self: flex-end;
-  margin-bottom: 8px;
-`;
-
-const MonthsContainer = styled.div`
-  margin-top: 15px;
-`;
-
-const MonthsToggle = styled.button`
-  width: 100%;
-  background: #f8f9fa;
-  border: none;
+  background-color: #f0f9ff;
   border-radius: 6px;
-  padding: 12px;
-  cursor: pointer;
+  border-left: 4px solid #3498db;
+`;
+
+const CityName = styled.h4`
+  margin: 0 0 10px 0;
+  color: #2b6cb0;
+  font-weight: 600;
+`;
+
+const AnualValue = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  transition: background 0.2s;
-  font-weight: bold;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: linear-gradient(to right, #f6d365 0%, #fda085 100%);
+  border-radius: 6px;
+  color: white;
+  
+  span:first-child {
+    font-weight: 600;
+    margin-right: 8px;
+  }
+  
+  span:last-child {
+    font-size: 20px;
+    font-weight: 700;
+  }
+`;
+
+const MonthsToggle = styled.summary`
+  cursor: pointer;
+  padding: 8px 4px;
+  font-weight: 500;
+  color: #4a5568;
   
   &:hover {
-    background: #e9ecef;
+    color: #3182ce;
   }
 `;
 
 const MonthsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-top: 15px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
 `;
 
 const MonthCard = styled.div`
-  background: #f8f9fa;
-  border-radius: 6px;
-  padding: 10px;
+  background-color: #edf2f7;
+  border-radius: 4px;
+  padding: 8px;
   text-align: center;
 `;
 
 const MonthName = styled.div`
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #7f8c8d;
+  font-size: 13px;
+  color: #718096;
+  margin-bottom: 4px;
 `;
 
 const MonthValue = styled.div`
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #3498db;
+  font-weight: 600;
+  color: #2d3748;
 `;
 
-const SunIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="5" />
-    <line x1="12" y1="1" x2="12" y2="3" />
-    <line x1="12" y1="21" x2="12" y2="23" />
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-    <line x1="1" y1="12" x2="3" y2="12" />
-    <line x1="21" y1="12" x2="23" y2="12" />
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-  </svg>
-);
+const NoDataMessage = styled.div`
+  padding: 15px;
+  background-color: #fff3cd;
+  border-radius: 6px;
+  color: #856404;
+  text-align: center;
+  font-weight: 500;
+`;
 
-const IncidenciaSolar: React.FC<IncidenciaSolarProps> = ({ data, onClose }) => {
-  const [showMonthly, setShowMonthly] = React.useState(false);
+const IncidenciaSolar: React.FC = () => {
+  const [incidenciaData, setIncidenciaData] = useState<IncidenciaData | null>(null);
+  const [visible, setVisible] = useState(false);
 
-  if (!data) return null;
+  useEffect(() => {
+    const handleIncidenciaData = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      setIncidenciaData(customEvent.detail);
+      setVisible(true);
+    };
+
+    window.addEventListener('incidenciaData', handleIncidenciaData);
+
+    return () => {
+      window.removeEventListener('incidenciaData', handleIncidenciaData);
+    };
+  }, []);
+
+  if (!visible || !incidenciaData) {
+    return null;
+  }
 
   return (
     <Container>
-      <Header>
-        <Title>
-          <SunIcon /> 
-          Incidência Solar: {data.cidade.nome}
-        </Title>
-        <CloseButton onClick={onClose}>×</CloseButton>
-      </Header>
-
-      {data.incidencia ? (
-        <>
-          <AnualDisplay>
-            <Label>Média Anual:</Label>
-            <Value>{data.incidencia.anual}</Value>
-            <Unit>Wh/m²/dia</Unit>
-          </AnualDisplay>
-
-          <MonthsContainer>
-            <MonthsToggle onClick={() => setShowMonthly(!showMonthly)}>
-              <span>Dados Mensais</span>
-              <span>{showMonthly ? '▲' : '▼'}</span>
-            </MonthsToggle>
-            
-            {showMonthly && (
-              <MonthsGrid>
-                {Object.entries(data.incidencia.mensal).map(([month, value]) => (
-                  <MonthCard key={month}>
-                    <MonthName>{month.charAt(0).toUpperCase() + month.slice(1)}</MonthName>
-                    <MonthValue>{value}</MonthValue>
-                  </MonthCard>
-                ))}
-              </MonthsGrid>
-            )}
-          </MonthsContainer>
-        </>
+      <CloseButton onClick={() => setVisible(false)}>×</CloseButton>
+      <Title>Incidência Solar</Title>
+      
+      {incidenciaData.incidencia ? (
+        <IncidenciaCard>
+          <CityName>{incidenciaData.cidade.nome}</CityName>
+          <AnualValue>
+            <span>Média Anual:</span>
+            <span>{incidenciaData.incidencia.anual}</span>
+            <span style={{ marginLeft: '5px', fontSize: '14px' }}>Wh/m²/dia</span>
+          </AnualValue>
+          
+          <details>
+            <MonthsToggle>Valores mensais</MonthsToggle>
+            <MonthsGrid>
+              <MonthCard>
+                <MonthName>Janeiro</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.jan}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Fevereiro</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.fev}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Março</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.mar}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Abril</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.abr}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Maio</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.mai}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Junho</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.jun}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Julho</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.jul}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Agosto</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.ago}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Setembro</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.set}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Outubro</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.out}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Novembro</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.nov}</MonthValue>
+              </MonthCard>
+              <MonthCard>
+                <MonthName>Dezembro</MonthName>
+                <MonthValue>{incidenciaData.incidencia.mensal.dez}</MonthValue>
+              </MonthCard>
+            </MonthsGrid>
+          </details>
+        </IncidenciaCard>
       ) : (
-        <div style={{ padding: "15px", backgroundColor: "#fff3cd", borderRadius: "6px" }}>
-          {data.mensagem || "Não há dados disponíveis para esta cidade."}
-        </div>
+        <NoDataMessage>
+          {incidenciaData.mensagem || "Não há dados de incidência disponíveis para esta cidade."}
+        </NoDataMessage>
       )}
     </Container>
   );
