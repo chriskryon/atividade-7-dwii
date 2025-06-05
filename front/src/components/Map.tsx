@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import type React from 'react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
@@ -21,7 +22,8 @@ const Mapa: React.FC = () => {
   const { mapData, fetchMapData } = useMapContext();
 
   // Initialize map only once
-  useEffect(() => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    useEffect(() => {
     if (mapContainer.current && !map.current) {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
@@ -56,7 +58,7 @@ const Mapa: React.FC = () => {
         map.current = null;
       }
     };
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, []);
 
   // Separate effect to handle map data updates
   useEffect(() => {
@@ -107,13 +109,13 @@ const Mapa: React.FC = () => {
 
         // Add event listeners only once
         map.current.on('click', 'spatial-data-layer', (e) => {
-          if (e.features?.[0]) {
+          if (e.features?.[0] && map.current) {
             const feature = e.features[0];
             new mapboxgl.Popup()
               .setLngLat([e.lngLat.lng, e.lngLat.lat])
-              .setHTML(`<h3>${feature.properties.name || 'Região'}</h3>
-                        <p>${feature.properties.description || 'Sem descrição disponível'}</p>`)
-              .addTo(map.current!);
+              .setHTML(`<h3>${feature.properties?.name || 'Região'}</h3>
+                        <p>${feature.properties?.description || 'Sem descrição disponível'}</p>`)
+              .addTo(map.current);
           }
         });
 
@@ -161,25 +163,33 @@ const Mapa: React.FC = () => {
           }
         });
 
-        // Add fill layer for incidencia
+        // Add fill layer with dynamic color based on annual value
         map.current.addLayer({
           id: 'incidencia-fill',
           type: 'fill',
           source: 'incidencia-source',
           paint: {
-            'fill-color': '#ff9900', // Orange color for solar incidence
-            'fill-opacity': 0.6
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'anual'],
+              3000, '#FFEB3B',
+              4000, '#FFA726',
+              5000, '#FF5722',
+              6000, '#D50000' 
+            ],
+            'fill-opacity': 0.4
           }
         });
 
-        // Add outline for better visibility
         map.current.addLayer({
           id: 'incidencia-outline',
           type: 'line',
           source: 'incidencia-source',
           paint: {
-            'line-color': '#ff5500',
-            'line-width': 2
+            'line-color': '#FF0000',
+            'line-width': 2,
+            'line-opacity': 0.8
           }
         });
 
@@ -187,10 +197,12 @@ const Mapa: React.FC = () => {
         map.current.on('click', 'incidencia-fill', (e) => {
           if (e.features?.[0]) {
             const props = e.features[0].properties;
-            new mapboxgl.Popup()
-              .setLngLat([e.lngLat.lng, e.lngLat.lat])
-              .setHTML(`<h3>${props.name}</h3><p>${props.description}</p>`)
-              .addTo(map.current!);
+            if (map.current) {
+              new mapboxgl.Popup()
+                .setLngLat([e.lngLat.lng, e.lngLat.lat])
+                .setHTML(`<h3>${props?.name || "Sem nome"}</h3><p>${props?.description || "Sem descrição"}</p>`)
+                .addTo(map.current);
+            }
           }
         });
 
