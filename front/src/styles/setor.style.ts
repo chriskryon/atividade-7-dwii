@@ -2,19 +2,20 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   position: absolute;
-  bottom: 24px;
-  right: 24px;
+  bottom: 20px;
+  right: 20px;
   width: 220px;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
-  border-radius: 24px;
-  padding: 14px;
+  border-radius: 20px;
+  padding: 20px;
   z-index: 10;
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+    0 15px 45px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.25) inset,
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   
@@ -32,12 +33,12 @@ export const Container = styled.div`
 
 export const CloseButton = styled.button`
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 32px;
-  height: 32px;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: rgba(142, 142, 147, 0.12);
+  background: rgba(142, 142, 147, 0.08);
   border: none;
   font-size: 16px;
   color: #8e8e93;
@@ -46,16 +47,16 @@ export const CloseButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 500;
+  font-weight: 600;
   
   &:hover {
-    background: rgba(142, 142, 147, 0.2);
+    background: rgba(142, 142, 147, 0.15);
     color: #1d1d1f;
     transform: scale(1.1);
   }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.9);
   }
 `;
 
@@ -65,66 +66,80 @@ export const SectorCard = styled.div`
 `;
 
 export const SectorCode = styled.div`
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 28px;
+  font-weight: 900;
   color: #1d1d1f;
   margin-bottom: 8px;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
   letter-spacing: -1px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #667eea, #764ba2, #667eea);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: gradientFlow 4s ease-in-out infinite;
+
+  @keyframes gradientFlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
 `;
 
 export const ZoneType = styled.div`
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   color: #8e8e93;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 20px;
+  letter-spacing: 1.2px;
+  margin-bottom: 16px;
   position: relative;
   
   &::before {
     content: '';
     position: absolute;
-    bottom: -10px;
+    bottom: -8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 32px;
+    width: 28px;
     height: 2px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #667eea, #764ba2);
     border-radius: 2px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: translateX(-50%) scaleX(1); }
+    50% { opacity: 0.7; transform: translateX(-50%) scaleX(1.1); }
   }
 `;
 
 export const CityName = styled.div`
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: #1d1d1f;
-  margin-top: 20px;
+  margin-top: 16px;
   margin-bottom: 4px;
   letter-spacing: -0.4px;
   line-height: 1.2;
 `;
 
 export const AreaInfo = styled.div`
-  font-size: 14px;
+  font-size: 13px;
   color: #424245;
-  font-weight: 500;
+  font-weight: 600;
   margin-top: 8px;
   opacity: 0.8;
+  letter-spacing: 0.1px;
 `;
 
 export const NoDataMessage = styled.div`
-  padding: 24px;
+  padding: 24px 20px;
   text-align: center;
   color: #424245;
-  font-size: 15px;
-  background: rgba(248, 248, 248, 0.6);
+  font-size: 14px;
+  background: rgba(248, 248, 248, 0.8);
   border-radius: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.4;
   
   &::before {
@@ -132,7 +147,13 @@ export const NoDataMessage = styled.div`
     display: block;
     font-size: 24px;
     margin-bottom: 12px;
-    opacity: 0.6;
+    opacity: 0.7;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
   }
 `;
 

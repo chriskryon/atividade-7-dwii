@@ -25,7 +25,7 @@ const CidadesMenu: React.FC<CidadesMenuProps> = memo(({ onCidadeSelect }) => {
 
   return (
     <MenuContainer>
-      <MenuTitle>Setores Censitários</MenuTitle>
+      <MenuTitle>Cidade:</MenuTitle>
       
       <StyledSelect
         value={selectedCidade?.id || ''} 

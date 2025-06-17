@@ -11,75 +11,69 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     height: 100%;
     overflow: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #1d1d1f;
   }
 
-  /* Scrollbar personalizada */
+  /* Enhanced scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 4px;
     
     &:hover {
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.35);
     }
   }
 
-  /* Remove estilos duplicados do mapa */
+  /* Remove map info duplicated styles since they're now in MapContainer */
   .map-info {
-    position: absolute;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: 12px 20px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
-    color: white;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 5;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    letter-spacing: 0.2px;
-
-    &:hover {
-      transform: translateX(-50%) translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-    }
+    /* Styles moved to MapContainer.ts */
   }
 
   .error-message {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: 24px 32px;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-    color: #ff3b30;
-    border: 1px solid rgba(255, 59, 48, 0.2);
-    z-index: 100;
-    font-weight: 600;
-    font-size: 15px;
-    text-align: center;
-    max-width: 400px;
+    /* Styles moved to MapContainer.ts */
+  }
+
+  /* Enhanced selection styles */
+  ::selection {
+    background: rgba(102, 126, 234, 0.15);
+    color: #1d1d1f;
+  }
+
+  ::-moz-selection {
+    background: rgba(102, 126, 234, 0.15);
+    color: #1d1d1f;
+  }
+
+  /* Focus styles */
+  button:focus-visible,
+  select:focus-visible {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+  }
+
+  /* Improved button and input base styles */
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input, select, textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
   }
 `;
 
