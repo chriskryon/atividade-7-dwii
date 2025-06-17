@@ -20,6 +20,20 @@ export const CidadeProvider: React.FC<CidadeProviderProps> = ({ children }) => {
     const jacarei = cidades.find(cidade => cidade.nome === 'Jacareí');
     if (jacarei) {
       setSelectedCidade(jacarei);
+      
+      // Dispatch evento inicial para posicionar o mapa
+      if (jacarei.geometry && jacarei.geometry.coordinates && jacarei.geometry.coordinates.length === 2) {
+        const [lng, lat] = jacarei.geometry.coordinates;
+        if (!isNaN(lng) && !isNaN(lat)) {
+          const event = new CustomEvent('cidadeChanged', {
+            detail: { 
+              cidade: jacarei,
+              coordinates: [lng, lat]
+            }
+          });
+          window.dispatchEvent(event);
+        }
+      }
     }
   }, [cidades]);
 

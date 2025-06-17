@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { censoService } from '../services';
 import * as wkt from 'wellknown';
 import type { SetorCensitarioContextType } from '../types/cidade.types';
@@ -119,6 +119,11 @@ export const SetorCensitarioProvider: React.FC<SetorCensitarioProviderProps> = (
     setSelectedSetor(null);
     setError(null);
   };
+
+  // Carregar Jacareí automaticamente quando o contexto for criado
+  useEffect(() => {
+    fetchSetoresByCidade('Jacareí');
+  }, []);
 
   return (
     <SetorCensitarioContext.Provider value={{

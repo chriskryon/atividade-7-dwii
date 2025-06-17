@@ -6,6 +6,11 @@ export const useCidade = () => {
   const setorContext = useSetorCensitarioContext();
 
   const changeCidade = async (cidadeId: number) => {
+    // Evitar recarregar a mesma cidade
+    if (cidadeContext.selectedCidade?.id === cidadeId) {
+      return;
+    }
+
     const cidade = cidadeContext.cidades.find(c => c.id === cidadeId);
     
     if (cidade) {

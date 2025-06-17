@@ -54,6 +54,28 @@ const Mapa: React.FC = () => {
     };
   }, []);
 
+  // Listen for cidade changes
+  useEffect(() => {
+    const handleCidadeChanged = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { coordinates } = customEvent.detail;
+      
+      if (map.current && coordinates && Array.isArray(coordinates) && coordinates.length === 2) {
+        const [lng, lat] = coordinates;
+        if (!isNaN(lng) && !isNaN(lat)) {
+          map.current.flyTo({
+            center: [lng, lat],
+            zoom: 11,
+            essential: true
+          });
+        }
+      }
+    };
+
+    window.addEventListener('cidadeChanged', handleCidadeChanged);
+    return () => window.removeEventListener('cidadeChanged', handleCidadeChanged);
+  }, []);
+
   // Listen for setores updates
   useEffect(() => {
     const handleSetoresUpdated = (event: Event) => {
@@ -62,20 +84,16 @@ const Mapa: React.FC = () => {
       
       console.log('Setores atualizados:', { updatedSetores, centroid, cidade });
       
-      // Só fazer flyTo se o centroid for válido
+      // Só fazer flyTo se o centroid for válido e diferente da posição atual
       if (map.current && centroid && Array.isArray(centroid) && centroid.length === 2) {
         const [lng, lat] = centroid;
         if (!isNaN(lng) && !isNaN(lat)) {
           map.current.flyTo({
             center: [lng, lat],
-            zoom: 11,
+            zoom: 12, // Zoom um pouco maior para setores
             essential: true
           });
-        } else {
-          console.warn('Centroid inválido:', centroid);
         }
-      } else {
-        console.warn('Centroid não disponível ou inválido:', centroid);
       }
     };
 
