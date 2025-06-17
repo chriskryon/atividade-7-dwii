@@ -4,7 +4,7 @@ export const MapContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   overflow: hidden;
 
   &::before {
@@ -15,8 +15,8 @@ export const MapContainer = styled.div`
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(circle at top right, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+      radial-gradient(circle at top right, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at bottom left, rgba(0, 0, 0, 0.01) 0%, transparent 50%);
     pointer-events: none;
     z-index: 1;
   }
@@ -27,17 +27,17 @@ export const MapContainer = styled.div`
     height: 44px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     padding: 12px 24px;
     border-radius: 22px;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.9);
+    color: #333;
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+      0 8px 30px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(0, 0, 0, 0.05) inset;
+    border: 1px solid rgba(0, 0, 0, 0.05);
     z-index: 5;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
@@ -51,9 +51,12 @@ export const MapContainer = styled.div`
     &:hover {
       transform: translateX(-50%) translateY(-2px);
       box-shadow: 
-        0 12px 40px rgba(0, 0, 0, 0.5),
-        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
-      background: rgba(0, 0, 0, 0.9);
+        0 12px 36px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(0, 0, 0, 0.08) inset;
+    }
+    
+    &::before {
+      content: '';
     }
   }
 
@@ -68,8 +71,8 @@ export const MapContainer = styled.div`
     padding: 32px 40px;
     border-radius: 20px;
     box-shadow: 
-      0 25px 70px rgba(0, 0, 0, 0.25),
-      0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+      0 25px 50px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.05) inset;
     color: #ff3b30;
     border: 1px solid rgba(255, 59, 48, 0.15);
     z-index: 100;
@@ -104,9 +107,9 @@ export const MapContainer = styled.div`
     border-radius: 24px;
     padding: 28px 32px;
     box-shadow: 
-      0 25px 70px rgba(0, 0, 0, 0.3),
-      0 0 0 1px rgba(255, 255, 255, 0.25) inset;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+      0 25px 70px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(0, 0, 0, 0.05) inset;
+    border: 1px solid rgba(0, 0, 0, 0.04);
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
@@ -161,6 +164,42 @@ export const MapContainer = styled.div`
 
   .mapboxgl-popup-tip {
     border-top-color: rgba(255, 255, 255, 0.98) !important;
+  }
+  
+  .mapboxgl-ctrl-logo {
+    opacity: 0.6;
+  }
+  
+  .current-location {
+    position: absolute;
+    left: 10px;
+    bottom: 100px;
+    background: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &::before {
+      content: '';
+      font-size: 18px;
+    }
+    
+    &:hover {
+      background: #f8f8f8;
+    }
+  }
+  
+  .map-coordinates {
+    /* Jacareí coordinates display */
+    &::after {
+      content: 'Longitude: -45.9664 | Latitude: -23.3055 | Zoom: 11 | Cidade: Jacareí';
+    }
   }
 `;
 

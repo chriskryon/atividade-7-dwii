@@ -90,6 +90,12 @@ const SetorCensitario: React.FC = () => {
         </NoDataMessage>
       )}
 
+      {!loading && !error && !selectedSetor && (
+        <NoDataMessage>
+          <div style={{ fontWeight: 600 }}>Aguardando seleção</div>
+        </NoDataMessage>
+      )}
+
       {selectedSetor && !loading && (
         <div style={{
           opacity: dataVisible ? 1 : 0,

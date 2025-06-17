@@ -38,15 +38,6 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
-  /* Remove map info duplicated styles since they're now in MapContainer */
-  .map-info {
-    /* Styles moved to MapContainer.ts */
-  }
-
-  .error-message {
-    /* Styles moved to MapContainer.ts */
-  }
-
   /* Enhanced selection styles */
   ::selection {
     background: rgba(102, 126, 234, 0.15);

@@ -1,5 +1,6 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
+// Existing exports (keeping these)
 export const MenuContainer = styled.div`
   position: fixed;
   top: 20px;
@@ -226,4 +227,31 @@ export const NoticeBanner = styled.div`
     0% { left: -100%; }
     100% { left: 100%; }
   }
+`;
+
+// Create spinning animation keyframes
+export const spinAnimation = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
+// Create styled spinner component
+export const Spinner = styled.div`
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  border-radius: 50%;
+  border-top: 2px solid #667eea;
+  animation: ${spinAnimation} 1s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+`;
+
+// Create transition container with improved height transition
+export const TransitionContainer = styled.div<{ height: number }>`
+  width: 100%;
+  height: ${props => `${props.height}px`};
+  overflow: hidden;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 `;

@@ -4,12 +4,12 @@ export const Container = styled.div`
   position: absolute;
   bottom: 20px;
   right: 20px;
-  width: 220px;
+  width: 160px;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   border-radius: 20px;
-  padding: 20px;
+  padding: 10px;
   z-index: 10;
   box-shadow: 
     0 15px 45px rgba(0, 0, 0, 0.12),
@@ -18,6 +18,7 @@ export const Container = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.2);
   animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
   @keyframes slideIn {
     from {
