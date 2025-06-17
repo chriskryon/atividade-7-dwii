@@ -5,24 +5,24 @@ export const MenuContainer = styled.div`
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  width: 280px; // Reduced from 320px
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 16px; // Reduced from 20px
-  padding: 18px; // Reduced from 24px
+  width: 280px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 20px;
   z-index: 10;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.03);
+    0 10px 36px rgba(0, 0, 0, 0.1),
+    0 2px 10px rgba(0, 0, 0, 0.04);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   overflow: hidden;
   
   &:hover {
     box-shadow: 
-      0 16px 48px rgba(0, 0, 0, 0.12),
-      0 2px 12px rgba(0, 0, 0, 0.05);
+      0 18px 48px rgba(0, 0, 0, 0.15),
+      0 2px 12px rgba(0, 0, 0, 0.06);
     transform: translateY(-50%) translateZ(0) scale(1.01);
   }
   
@@ -35,16 +35,16 @@ export const MenuContainer = styled.div`
     height: 1px;
     background: linear-gradient(90deg, 
       rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0.9) 50%,
       rgba(255, 255, 255, 0) 100%);
   }
 `;
 
 export const MenuTitle = styled.h2`
-  font-size: 18px; // Reduced from 22px
+  font-size: 20px;
   font-weight: 600;
-  margin: 0 0 16px 0; // Reduced from 20px
-  color: #111;
+  margin: 0 0 18px 0;
+  color: #0066CC;
   letter-spacing: -0.5px;
   position: relative;
   
@@ -53,7 +53,7 @@ export const MenuTitle = styled.h2`
     position: absolute;
     bottom: -8px;
     left: 0;
-    width: 36px;
+    width: 40px;
     height: 3px;
     background: linear-gradient(90deg, #0066CC, #339CFF);
     border-radius: 3px;
@@ -62,22 +62,22 @@ export const MenuTitle = styled.h2`
 
 export const StyledSelect = styled.select`
   width: 100%;
-  height: 40px; // Reduced from 46px
-  padding: 0 14px; // Reduced from 16px
-  border-radius: 10px; // Reduced from 12px
-  border: 1px solid rgba(200, 200, 200, 0.3);
-  background: rgba(255, 255, 255, 0.7);
-  font-size: 14px; // Reduced from 15px
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(200, 210, 220, 0.5);
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
   color: #333;
   appearance: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
   font-weight: 500;
   
   &:hover {
-    border-color: rgba(0, 102, 204, 0.3);
-    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 102, 204, 0.4);
+    background: rgba(255, 255, 255, 1);
   }
   
   &:focus {
@@ -98,19 +98,20 @@ export const StyledSelect = styled.select`
 
 export const SearchButton = styled.button`
   width: 100%;
-  height: 40px; // Reduced from 46px
-  margin-top: 16px; // Reduced from 20px
+  height: 42px;
+  margin-top: 16px;
   background: linear-gradient(135deg, #0071e3, #0077ED);
   border: none;
-  border-radius: 10px; // Reduced from 12px
+  border-radius: 12px;
   color: white;
-  font-size: 14px; // Reduced from 15px
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(0, 102, 204, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
   position: relative;
   overflow: hidden;
+  letter-spacing: 0.3px;
   
   &::before {
     content: '';
@@ -127,7 +128,7 @@ export const SearchButton = styled.button`
   
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 102, 204, 0.35);
+    box-shadow: 0 8px 18px rgba(0, 102, 204, 0.4);
     background: linear-gradient(135deg, #0077ED, #0086FF);
   }
   
@@ -147,13 +148,13 @@ export const SearchButton = styled.button`
 `;
 
 export const NoticeBanner = styled.div`
-  margin-top: 16px; // Reduced from 20px
-  padding: 12px 14px; // Reduced from 14px 16px
+  margin-top: 16px;
+  padding: 14px 16px;
   background: rgba(255, 59, 48, 0.08);
   border-left: 4px solid #FF3B30;
-  border-radius: 8px;
+  border-radius: 10px;
   color: #D70015;
-  font-size: 13px; // Reduced from 14px
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.4;
   animation: fadeIn 0.3s ease-out;

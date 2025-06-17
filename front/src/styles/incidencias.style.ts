@@ -1,34 +1,35 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  position: fixed; // Changed from absolute to fixed to stay in place when scrolling
+  position: fixed;
   top: 70px;
   right: 15px;
-  width: 290px; // Reduced from 320px
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 14px; // Reduced from 16px
-  padding: 14px; // Reduced from 18px
+  width: 300px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 18px;
+  padding: 18px;
   z-index: 10;
   box-shadow: 
-    0 6px 16px rgba(0, 0, 0, 0.08),
-    0 2px 6px rgba(0, 0, 0, 0.03);
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.04);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid rgba(240, 240, 240, 0.8);
+  border: 1px solid rgba(240, 240, 240, 0.9);
   overflow: hidden;
   
   &:hover {
     box-shadow: 
-      0 10px 22px rgba(0, 0, 0, 0.1),
-      0 2px 8px rgba(0, 0, 0, 0.04);
+      0 12px 28px rgba(0, 0, 0, 0.15),
+      0 2px 10px rgba(0, 0, 0, 0.05);
+    transform: translateY(-3px);
   }
 `;
 
 export const Title = styled.h2`
-  font-size: 17px; // Increased from 16px
+  font-size: 18px;
   font-weight: 600;
-  margin: 0 0 14px 0; // Reduced from 18px
+  margin: 0 0 16px 0;
   color: #0066CC;
   text-align: center;
   letter-spacing: -0.5px;
@@ -36,24 +37,25 @@ export const Title = styled.h2`
 
 export const CloseButton = styled.button`
   position: absolute;
-  top: 10px; // Reduced from 12px
-  right: 10px; // Reduced from 12px
-  width: 22px; // Reduced from 26px
-  height: 22px; // Reduced from 26px
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(240, 240, 240, 0.7);
+  background: rgba(240, 240, 240, 0.8);
   border: none;
   font-size: 18px;
-  color: #666;
+  color: #555;
   cursor: pointer;
   transition: all 0.2s ease;
   
   &:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: #333;
+    background: rgba(0, 0, 0, 0.08);
+    color: #222;
+    transform: rotate(90deg);
   }
   
   &:focus {
@@ -62,18 +64,18 @@ export const CloseButton = styled.button`
 `;
 
 export const IncidenciaCard = styled.div`
-  border-radius: 12px; // Reduced from 14px
+  border-radius: 14px;
   background: #FFFFFF;
-  padding: 12px; // Reduced from 16px
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(200, 210, 220, 0.3);
+  padding: 14px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(200, 210, 220, 0.4);
 `;
 
 export const CityName = styled.h3`
-  font-size: 16px; // Increased from 15px
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 600;
   color: #333;
-  margin: 0 0 6px 0; // Reduced from 8px
+  margin: 0 0 8px 0;
   letter-spacing: -0.3px;
   text-align: center;
 `;
@@ -81,35 +83,35 @@ export const CityName = styled.h3`
 export const LocationInfo = styled.div`
   display: flex;
   justify-content: center;
-  font-size: 12.5px; // Increased from 12px
+  font-size: 13px;
   color: #666;
   margin-bottom: 16px;
-  gap: 4px;
+  gap: 5px;
 `;
 
 export const MetricHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 `;
 
 export const MetricTitle = styled.div`
-  font-size: 13px; // Increased from 12px
+  font-size: 14px;
   font-weight: 500;
-  color: #666;
+  color: #555;
   
   &::before {
     content: '☀️';
-    margin-right: 4px;
+    margin-right: 5px;
   }
 `;
 
 export const MetricCategory = styled.div<{ value: number }>`
-  font-size: 13px; // Increased from 12px
+  font-size: 13.5px;
   font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 12px;
+  padding: 4px 10px;
+  border-radius: 14px;
   color: ${(props) => {
     if (props.value < 4000) return "#2E7D32"; // Verde para baixa
     if (props.value < 5000) return "#EF6C00"; // Laranja para média
@@ -117,33 +119,32 @@ export const MetricCategory = styled.div<{ value: number }>`
     return "#C62828";                        // Vermelho para muito alta
   }};
   background-color: ${(props) => {
-    if (props.value < 4000) return "rgba(46, 125, 50, 0.1)";
-    if (props.value < 5000) return "rgba(239, 108, 0, 0.1)";
-    if (props.value < 6000) return "rgba(216, 67, 21, 0.1)";
-    return "rgba(198, 40, 40, 0.1)";
+    if (props.value < 4000) return "rgba(46, 125, 50, 0.12)";
+    if (props.value < 5000) return "rgba(239, 108, 0, 0.12)";
+    if (props.value < 6000) return "rgba(216, 67, 21, 0.12)";
+    return "rgba(198, 40, 40, 0.12)";
   }};
 `;
 
-// Redesenhado para melhor visualização do valor principal
 export const MeterDisplay = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 8px 0 12px; // Reduced from 12px 0 16px
-  padding: 10px; // Reduced from 14px
-  background: linear-gradient(180deg, #FBFBFD 0%, #F5F7FC 100%);
-  border-radius: 10px; // Reduced from 12px
+  margin: 12px 0 16px;
+  padding: 16px 10px;
+  background: linear-gradient(180deg, #FCFCFE 0%, #F6F8FD 100%);
+  border-radius: 12px;
   box-shadow: 
-    0 3px 10px rgba(0, 0, 0, 0.02),
-    0 1px 2px rgba(0, 0, 0, 0.01);
+    0 4px 12px rgba(0, 0, 0, 0.03),
+    0 1px 3px rgba(0, 0, 0, 0.02);
   position: relative;
-  border: 1px solid rgba(200, 210, 220, 0.3);
+  border: 1px solid rgba(200, 210, 220, 0.4);
 `;
 
 export const MeterDigit = styled.span<{ value: number }>`
   display: inline;
   font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 34px; // Increased from 32px
+  font-size: 36px;
   font-weight: 600;
   color: ${(props) => {
     if (props.value < 4000) return "#2E7D32";
@@ -151,40 +152,41 @@ export const MeterDigit = styled.span<{ value: number }>`
     if (props.value < 6000) return "#D84315";
     return "#C62828";
   }};
+  letter-spacing: -0.5px;
 `;
 
 export const MeterUnit = styled.div`
   color: #637381;
-  font-size: 12px; // Increased from 11px
+  font-size: 13px;
   font-weight: 500;
-  margin-top: 6px; // Reduced from 8px
+  margin-top: 8px;
 `;
 
 export const MonthsToggle = styled.summary`
   cursor: pointer;
-  font-size: 14px; // Increased from 13px
+  font-size: 14.5px;
   font-weight: 500;
   color: #0071e3;
-  margin: 6px 0 0; // Reduced from 8px
-  padding: 8px 12px; // Reduced from 10px 14px
+  margin: 8px 0 0;
+  padding: 10px 14px;
   user-select: none;
-  border-radius: 10px;
+  border-radius: 12px;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(0, 113, 227, 0.05);
-  border: 1px solid rgba(0, 113, 227, 0.1);
+  background: rgba(0, 113, 227, 0.06);
+  border: 1px solid rgba(0, 113, 227, 0.15);
   position: relative;
   
   &:hover {
-    background: rgba(0, 113, 227, 0.08);
+    background: rgba(0, 113, 227, 0.09);
   }
   
   &::before {
     content: '📊';
-    margin-right: 8px;
-    font-size: 14px;
+    margin-right: 10px;
+    font-size: 15px;
   }
   
   &::after {
@@ -198,7 +200,7 @@ export const MonthsToggle = styled.summary`
   }
   
   details[open] > & {
-    border-radius: 10px 10px 0 0;
+    border-radius: 12px 12px 0 0;
     border-bottom-color: transparent;
     
     &::after {
@@ -210,16 +212,16 @@ export const MonthsToggle = styled.summary`
 export const MonthsGrid = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px; // Reduced from 8px
+  gap: 7px;
   margin: 0;
-  padding: 10px; // Reduced from 12px
-  background: rgba(250, 250, 250, 0.7);
-  border: 1px solid rgba(0, 113, 227, 0.1);
+  padding: 14px 12px;
+  background: rgba(250, 252, 255, 0.8);
+  border: 1px solid rgba(0, 113, 227, 0.15);
   border-top: none;
-  border-radius: 0 0 10px 10px;
-  animation: slideDown 0.2s ease;
-  max-height: 240px; // Added max-height to enable scrolling
-  overflow-y: auto; // Added scrolling
+  border-radius: 0 0 12px 12px;
+  animation: slideDown 0.25s ease;
+  max-height: 240px;
+  overflow-y: auto;
   
   // Custom scrollbar styling
   &::-webkit-scrollbar {
@@ -227,16 +229,16 @@ export const MonthsGrid = styled.div`
   }
   
   &::-webkit-scrollbar-track {
-    background: rgba(240, 240, 240, 0.5);
+    background: rgba(240, 245, 250, 0.6);
     border-radius: 10px;
   }
   
   &::-webkit-scrollbar-thumb {
-    background: rgba(0, 113, 227, 0.2);
+    background: rgba(0, 113, 227, 0.25);
     border-radius: 10px;
     
     &:hover {
-      background: rgba(0, 113, 227, 0.3);
+      background: rgba(0, 113, 227, 0.35);
     }
   }
   
@@ -246,76 +248,76 @@ export const MonthsGrid = styled.div`
   }
 `;
 
-// Melhorados os gráficos de barra mensais para maior clareza
 export const MonthMeter = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 22px; // Reduced from 26px
+  height: 24px;
 `;
 
 export const MonthLabel = styled.div`
-  width: 28px;
-  font-size: 12px; // Increased from 11px
+  width: 30px;
+  font-size: 13px;
   font-weight: 500;
-  color: #555;
+  color: #444;
 `;
 
 export const MonthBar = styled.div`
   flex: 1;
-  height: 7px; // Reduced from 8px
-  background: #f0f0f0;
+  height: 8px;
+  background: #f0f4f8;
   border-radius: 4px;
   overflow: hidden;
-  margin: 0 6px; // Reduced from 0 8px
+  margin: 0 8px;
   position: relative;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 `;
 
 export const MonthBarFill = styled.div<{ percent: number }>`
   height: 100%;
   width: ${(props) => props.percent}%;
   background: ${(props) => {
-    // Simplificado o gradiente para melhor legibilidade
-    if (props.percent < 30) return "#4CAF50";
-    if (props.percent < 50) return "#FFC107";
-    if (props.percent < 75) return "#FF9800";
-    return "#F44336";
+    if (props.percent < 30) return "linear-gradient(90deg, #4CAF50, #66BB6A)";
+    if (props.percent < 50) return "linear-gradient(90deg, #FFC107, #FFD54F)";
+    if (props.percent < 75) return "linear-gradient(90deg, #FF9800, #FFA726)";
+    return "linear-gradient(90deg, #F44336, #EF5350)";
   }};
   border-radius: 4px;
-  transition: width 0.6s ease-out;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
 `;
 
 export const MonthBarValue = styled.div<{ value?: number; maxValue?: number }>`
-  width: 52px;
-  font-size: 12px; // Increased from 11px
+  width: 56px;
+  font-size: 13px;
   font-weight: 500;
   color: #333;
   text-align: right;
   
   &::after {
     content: ' Wh/m²';
-    font-size: 9px; // Increased from 8px
+    font-size: 10px;
     color: #777;
     margin-left: 2px;
   }
 `;
 
 export const NoDataMessage = styled.div`
-  padding: 20px;
+  padding: 22px;
   text-align: center;
-  color: #666;
+  color: #555;
   font-size: 14px;
   font-style: italic;
-  background: #fafafa;
-  border-radius: 10px;
+  background: #fafcff;
+  border-radius: 12px;
   margin-top: 16px;
-  border: 1px dashed #ddd;
+  border: 1px dashed #ccd4e0;
   
   &::before {
     content: "⚠️";
     display: block;
-    font-size: 20px;
-    margin-bottom: 8px;
+    font-size: 24px;
+    margin-bottom: 10px;
   }
 `;
 
