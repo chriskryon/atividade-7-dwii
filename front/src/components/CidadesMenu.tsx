@@ -1,98 +1,65 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { cidades as cidadesData } from '../utils/cidades';
-import type { Cidade } from '../types/cidades.types';
-import type { IncidenciaData } from '../types/Incidentia.types';
+import { useState } from 'react';
+import { useMapContext } from '../contexts/MapContext';
 import type { CidadesMenuProps } from '../types/menu.types';
 import { MenuContainer, MenuTitle, NoticeBanner, SearchButton, StyledSelect } from '../styles/cidades.style';
+import { cidadesFiltradas as cidades } from '../utils/cidades_filter';
 
 const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidade }) => {
-  const [cidades, setCidades] = useState<Cidade[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [fetchingIncidencia, setFetchingIncidencia] = useState(false);
-
-  useEffect(() => {
-    try {
-      const formattedCidades = cidadesData.map(cidade => ({
-        id: cidade.id,
-        nome: cidade.nome,
-        geometry: {
-          type: cidade.geometry.type,
-          coordinates: [...cidade.geometry.coordinates]
-        }
-      }));
-
-      setCidades(formattedCidades);
-    } catch (err) {
-      setError('Erro ao carregar a lista de cidades');
-      console.error('Erro ao carregar cidades:', err);
-    }
-  }, []);
+  const [fetchingSetorCensitario, setFetchingSetorCensitario] = useState(false);
+  const { fetchCensusData, selectedCity, updateSelectedCity } = useMapContext();
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const cidadeId = Number(e.target.value);
-    const selectedCity = cidades.find(c => c.id === cidadeId);
+    const selectedCityData = cidades.find(c => c.id === cidadeId);
     
-    if (selectedCity) {
-      onCidadeSelect(cidadeId, selectedCity.geometry.coordinates as [number, number]);
+    if (selectedCityData) {
+      updateSelectedCity(selectedCityData.nome);
+      
+      if (onCidadeSelect) {
+        onCidadeSelect(cidadeId, selectedCityData.geometry.coordinates as [number, number]);
+      }
     }
   };
   
   const handleBuscarClick = async () => {
-    if (!selectedCidade) {
-      console.log("Nenhuma cidade selecionada");
-      return;
-    }
+    const cityToSearch = selectedCity || 'Jacareí';
+    
+    console.log(`handleBuscarClick chamado. Cidade a buscar: ${cityToSearch}`);
+    console.log(`fetchCensusData disponível:`, !!fetchCensusData);
     
     try {
-      setFetchingIncidencia(true);
+      setFetchingSetorCensitario(true);
+      setError(null);
+
+      console.log(`Iniciando busca para a cidade: ${cityToSearch}`);
       
-      const response = await axios.get(`http://localhost:3001/cidade/${selectedCidade}`);
-      const data: IncidenciaData = response.data;
-      
-      console.log("Dados de incidência:", data);
-      if (window.dispatchEvent) {
-        window.dispatchEvent(new CustomEvent('incidenciaData', { detail: data }));
+      // Buscar setores censitários passando o nome da cidade
+      if (fetchCensusData) {
+        console.log('Chamando fetchCensusData...');
+        await fetchCensusData(cityToSearch);
+        console.log('fetchCensusData concluído');
+      } else {
+        console.error('fetchCensusData não está disponível');
+        setError('Erro: função de busca não disponível');
       }
       
-      if (data.incidencia?.geom) {
-        const feature = {
-          type: "Feature",
-          geometry: data.incidencia.geom,
-          properties: {
-            id: data.incidencia.id.toString(),
-            name: `Incidência em ${data.cidade.nome}`,
-            anual: data.incidencia.anual,
-            description: `Anual: ${data.incidencia.anual} Wh/m²/dia`
-          }
-        };
-        
-        // Dispatch event to add polygon to map
-        const event = new CustomEvent('updateIncidenciaPolygon', {
-          detail: {
-            feature: feature,
-            center: data.incidencia.centroid_geom ? data.incidencia.centroid_geom.coordinates : null
-          }
-        });
-        window.dispatchEvent(event);
-      }
-    } catch (error) {
-      console.error("Erro ao buscar dados de incidência:", error);
-      setError("Erro ao buscar dados de incidência para esta cidade");
+    } catch (error: any) {
+      console.error("Erro ao buscar dados:", error);
+      setError(`Erro ao buscar dados para ${cityToSearch}: ${error.message}`);
     } finally {
-      setFetchingIncidencia(false);
+      setFetchingSetorCensitario(false);
     }
   };
 
   return (
     <MenuContainer>
-      <MenuTitle>Cidades</MenuTitle>
+      <MenuTitle>Setores Censitários</MenuTitle>
       
       <StyledSelect
-        value={selectedCidade || ''} 
+        value={cidades.find(c => c.nome === selectedCity)?.id || 2} 
         onChange={handleSelectChange}
       >
-        <option value="">Selecione</option>
         {cidades.map(cidade => (
           <option key={cidade.id} value={cidade.id}>
             {cidade.nome}
@@ -102,9 +69,9 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
       
       <SearchButton 
         onClick={handleBuscarClick}
-        disabled={!selectedCidade || fetchingIncidencia}
+        disabled={fetchingSetorCensitario}
       >
-        {fetchingIncidencia ? 'Buscando...' : 'Buscar Dados de Incidência'}
+        {fetchingSetorCensitario ? 'Buscando...' : 'Buscar Dados'}
       </SearchButton>
       
       {error && (

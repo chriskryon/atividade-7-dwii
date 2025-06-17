@@ -1,119 +1,63 @@
 import pool from "./db";
-import * as fs from "node:fs";
-import * as path from "node:path";
+import * as fs from "fs";
+import * as path from "path";
 
 interface GeoJSONFeature {
-	type: string;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	properties: { [key: string]: any };
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	geometry: { [key: string]: any };
+  type: string;
+  properties: { [key: string]: any };
+  geometry: { [key: string]: any };
 }
 
 interface GeoJSON {
-	type: string;
-	features: GeoJSONFeature[];
+  type: string;
+  features: GeoJSONFeature[];
 }
 
-async function importGeoJSONCidades(filePath: string, tableName: string) {
-	try {
-		const geojsonData: GeoJSON = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+async function importGeoJSON(filePath: string) {
+  try {
+    const tableName = "censo";
+    const geojsonData: GeoJSON = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
-		console.log(
-			`Iniciando importação de ${geojsonData.features.length} registros para a tabela ${tableName}.`,
-		);
+    console.log(
+      `Iniciando importação de ${geojsonData.features.length} registros para a tabela ${tableName}.`
+    );
 
-		// Limpa a tabela antes de inserir novos dados
-		await pool.query(`TRUNCATE TABLE ${tableName} CASCADE;`);
+    for (const feature of geojsonData.features) {
+      const cd_setor = feature.properties.CD_SETOR || 0;
+      const situacao = feature.properties.SITUACAO || "";
+      const area_km2 = feature.properties.AREA_KM2 || 0;
+      const nm_mun = feature.properties.NM_MUN || "";
+      const geom = JSON.stringify(feature.geometry);
 
-		for (const feature of geojsonData.features) {
-			const nome = feature.properties.nome || "";
-			const geom = JSON.stringify(feature.geometry);
-
-			const insertQuery = `
-        INSERT INTO ${tableName} (nome, geom)
-        VALUES ($1, ST_SetSRID(ST_GeomFromGeoJSON($2), 4326))
+      const insertQuery = `
+        INSERT INTO ${tableName} (cd_setor, situacao, area_km2, nm_mun, geom)
+        VALUES ($1, $2, $3, $4, ST_SetSRID(ST_GeomFromGeoJSON($5), 4326))
       `;
 
-			await pool.query(insertQuery, [nome, geom]);
-		}
+      await pool.query(insertQuery, [cd_setor,situacao, area_km2, nm_mun, geom]);
+    }
 
-		console.log(`Importação concluída com sucesso na tabela ${tableName}.`);
-	} catch (error) {
-		console.error("Erro na importação:", error);
-	}
+    console.log(`Importação concluída com sucesso na tabela ${tableName}.`);
+  } catch (error) {
+    console.error("Erro na importação:", error);
+  }
 }
 
-async function importGeoJSONIncidencias(filePath: string, tableName: string) {
-	try {
-		const geojsonData: GeoJSON = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+// Caminho para os arquivos GeoJSON
+const campinas = path.join(__dirname, "../../data/", "censo_2022_campinas.geojson");
+const jacarei = path.join(__dirname, "../../data/", "censo_2022_jacarei.geojson");
+const piracicaba = path.join(__dirname, "../../data/", "censo_2022_piracicaba.geojson");
+const ribeirao_preto = path.join(__dirname, "../../data/", "censo_2022_ribeirao_preto.geojson");
+const sao_jose_do_rio_preto = path.join(__dirname, "../../data/", "censo_2022_sao_jose_do_rio_preto.geojson");
+const sao_jose_dos_campos = path.join(__dirname, "../../data/", "censo_2022_sao_jose_dos_campos.geojson");
+const sorocaba = path.join(__dirname, "../../data/", "censo_2022_sorocaba.geojson");
 
-		console.log(
-			`Iniciando importação de ${geojsonData.features.length} registros para a tabela ${tableName}.`,
-		);
-
-		// Limpa a tabela antes de inserir novos dados
-		await pool.query(`TRUNCATE TABLE ${tableName} CASCADE;`);
-
-		for (const feature of geojsonData.features) {
-			const lon = feature.properties.lon || 0;
-			const lat = feature.properties.lat || 0;
-			const anual = feature.properties.anual || 0;
-			const jan = feature.properties.jan || 0;
-			const fev = feature.properties.fev || 0;
-			const mar = feature.properties.mar || 0;
-			const abr = feature.properties.abr || 0;
-			const mai = feature.properties.mai || 0;
-			const jun = feature.properties.jun || 0;
-			const jul = feature.properties.jul || 0;
-			const ago = feature.properties.ago || 0;
-			const set = feature.properties.set || 0;
-			const out = feature.properties.out || 0;
-			const nov = feature.properties.nov || 0;
-			const dez = feature.properties.dez || 0;
-			const geom = JSON.stringify(feature.geometry);
-
-			const insertQuery = `
-        INSERT INTO ${tableName} (lon, lat, anual, jan, fev, mar, abr, mai, jun, jul, ago, set, out, nov, dez, geom)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, ST_SetSRID(ST_GeomFromGeoJSON($16), 4326))
-      `;
-
-			await pool.query(insertQuery, [
-				lon,
-				lat,
-				anual,
-				jan,
-				fev,
-				mar,
-				abr,
-				mai,
-				jun,
-				jul,
-				ago,
-				set,
-				out,
-				nov,
-				dez,
-				geom,
-			]);
-		}
-
-		console.log(`Importação concluída com sucesso na tabela ${tableName}.`);
-	} catch (error) {
-		console.error("Erro na importação:", error);
-	}
-}
-
-// Caminho para o arquivo GeoJSON
-const filePathCidades = path.join(__dirname, "../../data/", "cidade.geojson");
 // Executa a função
-importGeoJSONCidades(filePathCidades, "cidades");
+importGeoJSON(campinas);
+importGeoJSON(jacarei);
+importGeoJSON(piracicaba);
+importGeoJSON(ribeirao_preto);
+importGeoJSON(sao_jose_do_rio_preto);
+importGeoJSON(sao_jose_dos_campos);
+importGeoJSON(sorocaba);
 
-// Caminho para o arquivo GeoJSON
-const filePathIncidencias = path.join(
-	__dirname,
-	"../../data/",
-	"global_horizontal_means.geojson",
-);
-// Executa a função
-importGeoJSONIncidencias(filePathIncidencias, "incidencias");

@@ -1,4 +1,4 @@
-export interface GeoFeature {
+export interface GeoFeature3D {
 	id: string;
 	type: string;
 	geometry: {
@@ -13,13 +13,20 @@ export interface GeoFeature {
 }
 
 export interface MapData {
-	features: GeoFeature[];
+	features: any[];
 	loading: boolean;
 	error: string | null;
+	centroid?: {
+		latitude: number;
+		longitude: number;
+	};
 }
 
 export interface MapContextType {
 	mapData: MapData;
 	fetchMapData: () => Promise<void>;
 	setMapData: (data: MapData) => void;
+	selectedCity: string;
+	fetchCensusData: (cityName: string) => Promise<void>;
+	updateSelectedCity: (cityName: string) => void;
 }

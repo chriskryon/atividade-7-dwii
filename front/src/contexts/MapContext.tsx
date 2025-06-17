@@ -1,7 +1,8 @@
 import type React from 'react';
-import { createContext, useState, useContext, type ReactNode } from 'react'
+import { createContext, useState, useContext, useEffect, type ReactNode } from 'react'
 import type { MapData, MapContextType } from '../types/map.types';
-import api from '../services/api';
+import { censoApi } from '../services/api';
+import * as wkt from 'wellknown';
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
 
@@ -15,49 +16,96 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
     loading: false,
     error: null
   });
+  const [selectedCity, setSelectedCity] = useState<string>('Jacareí');
 
-  const fetchMapData = async (): Promise<void> => {
+  const fetchCensusData = async (cityName: string): Promise<void> => {
+    console.log(`fetchCensusData chamado para cidade: ${cityName}`);
+    
     try {
-      setMapData({
-        ...mapData,
+      setMapData(prev => ({
+        ...prev,
         loading: true,
         error: null
-      });
-
-      const response = await api.get('/cidade'); // Usando a rota correta para obter todas as cidades
-      
-      // Transformando os dados recebidos no formato esperado pelo mapa
-      const geoFeatures = response.data.map((cidade: any) => ({
-        id: cidade.id.toString(),
-        type: 'Feature',
-        geometry: cidade.geometry || {
-          type: 'Polygon',
-          coordinates: cidade.coordinates || []
-        },
-        properties: {
-          name: cidade.nome,
-          description: `População: ${cidade.populacao || 'N/A'}`,
-          ...cidade
-        }
       }));
+
+      console.log(`Fazendo chamada para censoApi.list com cidade: ${cityName}`);
+      
+      // Usar a nova API de censo
+      const response = await censoApi.list(cityName);
+      
+      console.log("Response recebida:", response);
+      console.log("Número de polígonos:", response.polygons?.length);
+      
+      // Verificar se há dados válidos
+      if (!response || !response.polygons || response.polygons.length === 0) {
+        throw new Error('Nenhum setor censitário encontrado para esta cidade');
+      }
+      
+      // Converter WKT para GeoJSON
+      const geoFeatures = response.polygons.map((polygon: any, index: number) => {
+        try {
+          // Converter WKT para GeoJSON usando a biblioteca wellknown
+          const geometry = wkt.parse(polygon.geom);
+          
+          if (!geometry) {
+            console.error(`Erro ao converter WKT para GeoJSON no polígono ${index}:`, polygon.geom);
+            return null;
+          }
+          
+          return {
+            id: `setor-${index}`, // ID único para cada feature
+            type: 'Feature',
+            geometry: geometry,
+            properties: {
+              id: `setor-${index}`, // Também nas propriedades
+              name: `Setor ${index + 1}`,
+              description: `Cidade: ${cityName}`,
+              city: cityName,
+              wkt: polygon.geom // Manter WKT original como referência
+            }
+          };
+        } catch (error) {
+          console.error(`Erro ao processar polígono ${index}:`, error);
+          return null;
+        }
+      }).filter(Boolean); // Remove features nulas
+      
+      console.log(`${geoFeatures.length} features processadas com sucesso`);
+      console.log("Primeira feature convertida:", geoFeatures[0]);
       
       setMapData({
         features: geoFeatures,
         loading: false,
-        error: null
+        error: null,
+        centroid: response.centroid
       });
-    } catch (error) {
-      setMapData({
-        ...mapData,
+      setSelectedCity(cityName);
+    } catch (error: any) {
+      console.error('Erro detalhado ao buscar setores censitários:', error);
+      setMapData(prev => ({
+        ...prev,
         loading: false,
-        error: 'Erro ao carregar dados do mapa'
-      });
-      console.error('Erro ao buscar dados do mapa:', error);
+        error: `Erro ao carregar setores censitários de ${cityName}: ${error.message}`
+      }));
     }
   };
 
+  const fetchMapData = async (): Promise<void> => {
+    // Usar a cidade já selecionada ou Jacareí como padrão
+    await fetchCensusData(selectedCity);
+  };
+
+  const updateSelectedCity = (cityName: string) => {
+    setSelectedCity(cityName);
+  };
+
+  // Inicializar com Jacareí carregando os dados automaticamente
+  useEffect(() => {
+    fetchCensusData('Jacareí');
+  }, []);
+
   return (
-    <MapContext.Provider value={{ mapData, fetchMapData, setMapData }}>
+    <MapContext.Provider value={{ mapData, fetchMapData, setMapData, selectedCity, fetchCensusData, updateSelectedCity }}>
       {children}
     </MapContext.Provider>
   );

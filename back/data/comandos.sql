@@ -1,28 +1,9 @@
-DROP TABLE IF EXISTS cidades;
-CREATE TABLE cidades (
-    id SERIAL PRIMARY KEY,
-    nome TEXT,
-    geom GEOMETRY(Point, 4326)
-);
-
-DROP TABLE IF EXISTS incidencias;
-CREATE TABLE incidencias (
-    id SERIAL PRIMARY KEY,
-    lon FLOAT,
-    lat FLOAT,
-    anual INTEGER,
-    jan INTEGER,
-    fev INTEGER,
-    mar INTEGER,
-    abr INTEGER,
-    mai INTEGER,
-    jun INTEGER,
-    jul INTEGER,
-    ago INTEGER,
-    set INTEGER,
-    out INTEGER,
-    nov INTEGER,
-    dez INTEGER,
-    geom GEOMETRY(Polygon, 4326)
+DROP TABLE IF EXISTS censo;
+CREATE TABLE censo (
+    cd_setor BIGINT PRIMARY KEY,
+    situacao VARCHAR(50),
+    area_km2 FLOAT,
+    nm_mun VARCHAR(100),
+    geom GEOMETRY(MultiPolygon, 4326)
 );
 

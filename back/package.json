@@ -6,7 +6,7 @@
   "scripts": {
     "load": "ts-node ./src/controllers/load.ts",
     "start": "ts-node ./src",
-    "dev": "ts-node-dev ./src/app.ts"
+    "dev": "ts-node-dev ./src"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +16,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "pg": "^8.16.0"
+    "pg": "^8.14.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

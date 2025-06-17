@@ -1,9 +1,9 @@
-export interface IncidenciaData {
+export interface SetorCensitarioData {
 	cidade: {
 		id: number;
 		nome: string;
 	};
-	incidencia?: {
+	setorCensitario?: {
 		id: number;
 		lon: number;
 		lat: number;
