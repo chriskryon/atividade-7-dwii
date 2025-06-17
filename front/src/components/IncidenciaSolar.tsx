@@ -10,6 +10,7 @@ import {
   Title,
   NoDataMessage,
   CityName,
+  LocationInfo,
   MeterDisplay,
   MeterDigit,
   MeterUnit,
@@ -17,7 +18,10 @@ import {
   MonthLabel,
   MonthBar,
   MonthBarValue,
-  MonthBarFill
+  MonthBarFill,
+  MetricHeader,
+  MetricTitle,
+  MetricCategory
 } from '../styles/incidencias.style';
 
 const IncidenciaSolar: React.FC = () => {
@@ -38,11 +42,6 @@ const IncidenciaSolar: React.FC = () => {
     };
   }, []);
 
-  // Create digital display digits
-  const getDigits = (value: number): string[] => {
-    return value.toString().padStart(5, '0').split('');
-  };
-
   // Find the highest monthly value to calculate percentages
   const getMaxMonthlyValue = (mensal: any): number => {
     return Math.max(
@@ -60,10 +59,10 @@ const IncidenciaSolar: React.FC = () => {
 
   // Get color description based on annual value
   const getValueCategory = (value: number): string => {
-    if (value < 4000) return 'baixa';
-    if (value < 5000) return 'média';
-    if (value < 6000) return 'alta';
-    return 'muito alta';
+    if (value < 4000) return 'Baixa';
+    if (value < 5000) return 'Média';
+    if (value < 6000) return 'Alta';
+    return 'Muito alta';
   };
 
   if (!visible || !incidenciaData) {
@@ -82,154 +81,54 @@ const IncidenciaSolar: React.FC = () => {
         <IncidenciaCard>
           <CityName>{incidenciaData.cidade.nome}</CityName>
           
-          {/* Modern Single-line Display with Dynamic Color */}
           <MeterDisplay>
             <MeterDigit value={incidenciaData.incidencia.anual}>
               {formatAnnualValue(incidenciaData.incidencia.anual)}
             </MeterDigit>
-            <MeterUnit value={incidenciaData.incidencia.anual}>
-              Wh/m²/dia • Incidência {getValueCategory(incidenciaData.incidencia.anual)}
+            <MeterUnit>
+              Wh/m²/dia
             </MeterUnit>
           </MeterDisplay>
           
           <details>
-            <MonthsToggle>Detalhes Mensais</MonthsToggle>
+            <MonthsToggle>Variação Mensal</MonthsToggle>
             <MonthsGrid>
-              {/* Monthly bar chart with color-changing values */}
-              <MonthMeter>
-                <MonthLabel>Jan</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.jan / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue 
-                  value={incidenciaData.incidencia.mensal.jan}
-                  maxValue={maxMonthValue}
-                >
-                  {incidenciaData.incidencia.mensal.jan}
-                </MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Fev</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.fev / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue 
-                  value={incidenciaData.incidencia.mensal.fev}
-                  maxValue={maxMonthValue}
-                >
-                  {incidenciaData.incidencia.mensal.fev}
-                </MonthBarValue>
-              </MonthMeter>
-
-              <MonthMeter>
-                <MonthLabel>Mar</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.mar / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue>{incidenciaData.incidencia.mensal.mar}</MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Abr</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.abr / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue>{incidenciaData.incidencia.mensal.abr}</MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Mai</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.mai / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue>{incidenciaData.incidencia.mensal.mai}</MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Jun</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.jun / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue>{incidenciaData.incidencia.mensal.jun}</MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Jul</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.jul / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue>{incidenciaData.incidencia.mensal.jul}</MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Ago</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.ago / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue>{incidenciaData.incidencia.mensal.ago}</MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Set</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.set / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue>{incidenciaData.incidencia.mensal.set}</MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Out</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.out / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue>{incidenciaData.incidencia.mensal.out}</MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Nov</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.nov / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue>{incidenciaData.incidencia.mensal.nov}</MonthBarValue>
-              </MonthMeter>
-              
-              <MonthMeter>
-                <MonthLabel>Dez</MonthLabel>
-                <MonthBar>
-                  <MonthBarFill 
-                    percent={(incidenciaData.incidencia.mensal.dez / maxMonthValue) * 100} 
-                  />
-                </MonthBar>
-                <MonthBarValue 
-                  value={incidenciaData.incidencia.mensal.dez}
-                  maxValue={maxMonthValue}
-                >
-                  {incidenciaData.incidencia.mensal.dez}
-                </MonthBarValue>
-              </MonthMeter>
+              {/* Meses em ordem cronológica */}
+              {(
+                [
+                  { key: 'jan', label: 'Jan' },
+                  { key: 'fev', label: 'Fev' },
+                  { key: 'mar', label: 'Mar' },
+                  { key: 'abr', label: 'Abr' },
+                  { key: 'mai', label: 'Mai' },
+                  { key: 'jun', label: 'Jun' },
+                  { key: 'jul', label: 'Jul' },
+                  { key: 'ago', label: 'Ago' },
+                  { key: 'set', label: 'Set' },
+                  { key: 'out', label: 'Out' },
+                  { key: 'nov', label: 'Nov' },
+                  { key: 'dez', label: 'Dez' }
+                ] as const
+              ).map(({ key, label }) => (
+                <MonthMeter key={key}>
+                  <MonthLabel>{label}</MonthLabel>
+                  <MonthBar>
+                    <MonthBarFill 
+                      percent={
+                        incidenciaData.incidencia?.mensal?.[key] !== undefined && maxMonthValue > 0
+                          ? (incidenciaData.incidencia.mensal[key] / maxMonthValue) * 100
+                          : 0
+                      } 
+                    />
+                  </MonthBar>
+                  <MonthBarValue 
+                    value={incidenciaData.incidencia?.mensal?.[key] ?? 0}
+                    maxValue={maxMonthValue}
+                  >
+                    {incidenciaData.incidencia?.mensal?.[key] ?? 0}
+                  </MonthBarValue>
+                </MonthMeter>
+              ))}
             </MonthsGrid>
           </details>
         </IncidenciaCard>

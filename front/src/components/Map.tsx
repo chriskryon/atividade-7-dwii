@@ -13,9 +13,9 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNmNW0iLCJhIjoiY204ZDRyOWIyMGxuMjJyb3g5a
 const Mapa: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [lng, setLng] = useState(-46.6333);
-  const [lat, setLat] = useState(-23.5505);
-  const [zoom, setZoom] = useState(12);
+  const [lng, setLng] = useState(-55.0);
+  const [lat, setLat] = useState(-14.0);
+  const [zoom, setZoom] = useState(3.5);
   const [selectedCidade, setSelectedCidade] = useState<number | null>(null);
   const [styleLoaded, setStyleLoaded] = useState(false);
   

@@ -39,22 +39,17 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
   };
   
   const handleBuscarClick = async () => {
-    if (!selectedCidade) {
-      console.log("Nenhuma cidade selecionada");
-      return;
-    }
+    if (!selectedCidade) return;
     
     try {
       setFetchingIncidencia(true);
-      
       const response = await axios.get(`http://localhost:3001/cidade/${selectedCidade}`);
       const data: IncidenciaData = response.data;
       
-      console.log("Dados de incidência:", data);
-      if (window.dispatchEvent) {
-        window.dispatchEvent(new CustomEvent('incidenciaData', { detail: data }));
-      }
+      // Dispatch incidencia data event
+      window.dispatchEvent(new CustomEvent('incidenciaData', { detail: data }));
       
+      // Handle polygon if available
       if (data.incidencia?.geom) {
         const feature = {
           type: "Feature",
@@ -68,17 +63,16 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
         };
         
         // Dispatch event to add polygon to map
-        const event = new CustomEvent('updateIncidenciaPolygon', {
+        window.dispatchEvent(new CustomEvent('updateIncidenciaPolygon', {
           detail: {
-            feature: feature,
-            center: data.incidencia.centroid_geom ? data.incidencia.centroid_geom.coordinates : null
+            feature,
+            center: data.incidencia.centroid_geom?.coordinates || null
           }
-        });
-        window.dispatchEvent(event);
+        }));
       }
     } catch (error) {
       console.error("Erro ao buscar dados de incidência:", error);
-      setError("Erro ao buscar dados de incidência para esta cidade");
+      setError("Erro ao buscar dados de incidência");
     } finally {
       setFetchingIncidencia(false);
     }
@@ -104,14 +98,10 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect, selectedCidad
         onClick={handleBuscarClick}
         disabled={!selectedCidade || fetchingIncidencia}
       >
-        {fetchingIncidencia ? 'Buscando...' : 'Buscar Dados de Incidência'}
+        {fetchingIncidencia ? 'Buscando...' : 'Buscar Incidência'}
       </SearchButton>
       
-      {error && (
-        <NoticeBanner>
-          {error}
-        </NoticeBanner>
-      )}
+      {error && <NoticeBanner>{error}</NoticeBanner>}
     </MenuContainer>
   );
 };

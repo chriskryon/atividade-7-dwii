@@ -2,20 +2,20 @@ import styled from "styled-components";
 
 export const MenuContainer = styled.div`
   position: absolute;
-  left: 20px;
+  left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  width: 320px;
+  width: 280px; // Reduced from 320px
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 24px;
+  border-radius: 16px; // Reduced from 20px
+  padding: 18px; // Reduced from 24px
   z-index: 10;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.08),
     0 2px 8px rgba(0, 0, 0, 0.03);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid rgba(255, 255, 255, 0.7);
   overflow: hidden;
   
@@ -41,9 +41,9 @@ export const MenuContainer = styled.div`
 `;
 
 export const MenuTitle = styled.h2`
-  font-size: 22px;
+  font-size: 18px; // Reduced from 22px
   font-weight: 600;
-  margin: 0 0 20px 0;
+  margin: 0 0 16px 0; // Reduced from 20px
   color: #111;
   letter-spacing: -0.5px;
   position: relative;
@@ -62,12 +62,12 @@ export const MenuTitle = styled.h2`
 
 export const StyledSelect = styled.select`
   width: 100%;
-  height: 46px;
-  padding: 0 16px;
-  border-radius: 12px;
+  height: 40px; // Reduced from 46px
+  padding: 0 14px; // Reduced from 16px
+  border-radius: 10px; // Reduced from 12px
   border: 1px solid rgba(200, 200, 200, 0.3);
   background: rgba(255, 255, 255, 0.7);
-  font-size: 15px;
+  font-size: 14px; // Reduced from 15px
   color: #333;
   appearance: none;
   cursor: pointer;
@@ -98,13 +98,13 @@ export const StyledSelect = styled.select`
 
 export const SearchButton = styled.button`
   width: 100%;
-  height: 46px;
-  margin-top: 20px;
+  height: 40px; // Reduced from 46px
+  margin-top: 16px; // Reduced from 20px
   background: linear-gradient(135deg, #0071e3, #0077ED);
   border: none;
-  border-radius: 12px;
+  border-radius: 10px; // Reduced from 12px
   color: white;
-  font-size: 15px;
+  font-size: 14px; // Reduced from 15px
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -137,21 +137,23 @@ export const SearchButton = styled.button`
   }
   
   &:disabled {
-    background: linear-gradient(135deg, #D8D8D8, #E5E5E5);
+    background: linear-gradient(135deg, rgba(0, 113, 227, 0.3), rgba(0, 119, 237, 0.2));
     cursor: not-allowed;
     opacity: 0.7;
     box-shadow: none;
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 113, 227, 0.1);
   }
 `;
 
 export const NoticeBanner = styled.div`
-  margin-top: 20px;
-  padding: 14px 16px;
+  margin-top: 16px; // Reduced from 20px
+  padding: 12px 14px; // Reduced from 14px 16px
   background: rgba(255, 59, 48, 0.08);
   border-left: 4px solid #FF3B30;
   border-radius: 8px;
   color: #D70015;
-  font-size: 14px;
+  font-size: 13px; // Reduced from 14px
   font-weight: 500;
   line-height: 1.4;
   animation: fadeIn 0.3s ease-out;
