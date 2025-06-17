@@ -1,8 +1,8 @@
 import type React from 'react';
 import { createContext, useState, useContext, useEffect, type ReactNode } from 'react'
 import type { MapData, MapContextType } from '../types/map.types';
-import { censoApi } from '../services/api';
 import * as wkt from 'wellknown';
+import { censoService } from '../services';
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
 
@@ -28,10 +28,10 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
         error: null
       }));
 
-      console.log(`Fazendo chamada para censoApi.list com cidade: ${cityName}`);
+      console.log(`Fazendo chamada para .list com cidade: ${cityName}`);
       
       // Usar a nova API de censo
-      const response = await censoApi.list(cityName);
+      const response = await censoService.list(cityName);
       
       console.log("Response recebida:", response);
       console.log("Número de polígonos:", response.polygons?.length);

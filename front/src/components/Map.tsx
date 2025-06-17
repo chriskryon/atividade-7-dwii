@@ -1,30 +1,30 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import type React from 'react';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { MapContainer, MapWrapper } from '../styles/MapContainer';
-import { useMapContext } from '../contexts/MapContext';
 import CidadesMenu from './CidadesMenu';
 import SetorCensitario from './SetorCensitario';
+import { useSetor } from '../hooks/useSetor';
+import { useCidade } from '../hooks/useCidade';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNmNW0iLCJhIjoiY204ZDRyOWIyMGxuMjJyb3g5a2I5djliZyJ9.M5B_cljHLFcGD_HOC4bJdg';
 
 const Mapa: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [lng, setLng] = useState(-46.6333);
-  const [lat, setLat] = useState(-23.5505);
-  const [zoom, setZoom] = useState(12);
-  const [selectedCidade, setSelectedCidade] = useState<number | null>(null);
+  const [lng, setLng] = useState(-45.96642);
+  const [lat, setLat] = useState(-23.30555);
+  const [zoom, setZoom] = useState(11);
   const [styleLoaded, setStyleLoaded] = useState(false);
   const [selectedFeatureId, setSelectedFeatureId] = useState<string | null>(null);
   
-  const { mapData, fetchMapData } = useMapContext();
+  const { selectedCidade, setoresError } = useCidade();
+  const { setores } = useSetor();
 
-  // Initialize map only once
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
+  // Initialize map
+  useEffect(() => {
     if (mapContainer.current && !map.current) {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
@@ -33,7 +33,6 @@ const Mapa: React.FC = () => {
         zoom: zoom
       });
 
-      // Set styleLoaded flag when the map style has loaded
       map.current.on('style.load', () => {
         setStyleLoaded(true);
       });
@@ -47,12 +46,6 @@ const Mapa: React.FC = () => {
       });
     }
 
-    // Fetch map data only once during component initialization
-    if (!mapData.features.length && !mapData.loading) {
-      fetchMapData();
-    }
-    
-    // Cleanup function to remove the map when component unmounts
     return () => {
       if (map.current) {
         map.current.remove();
@@ -61,9 +54,38 @@ const Mapa: React.FC = () => {
     };
   }, []);
 
-  // Separate effect to handle map data updates
+  // Listen for setores updates
   useEffect(() => {
-    if (!map.current || !styleLoaded || mapData.loading || mapData.features.length === 0) {
+    const handleSetoresUpdated = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { setores: updatedSetores, centroid, cidade } = customEvent.detail;
+      
+      console.log('Setores atualizados:', { updatedSetores, centroid, cidade });
+      
+      // Só fazer flyTo se o centroid for válido
+      if (map.current && centroid && Array.isArray(centroid) && centroid.length === 2) {
+        const [lng, lat] = centroid;
+        if (!isNaN(lng) && !isNaN(lat)) {
+          map.current.flyTo({
+            center: [lng, lat],
+            zoom: 11,
+            essential: true
+          });
+        } else {
+          console.warn('Centroid inválido:', centroid);
+        }
+      } else {
+        console.warn('Centroid não disponível ou inválido:', centroid);
+      }
+    };
+
+    window.addEventListener('setoresUpdated', handleSetoresUpdated);
+    return () => window.removeEventListener('setoresUpdated', handleSetoresUpdated);
+  }, []);
+
+  // Update map layers when setores change
+  useEffect(() => {
+    if (!map.current || !styleLoaded || setores.length === 0) {
       return;
     }
 
@@ -73,14 +95,14 @@ const Mapa: React.FC = () => {
       if (sourceExists) {
         (map.current.getSource('spatial-data') as mapboxgl.GeoJSONSource).setData({
           type: 'FeatureCollection',
-          features: mapData.features
+          features: setores
         });
       } else {
         map.current.addSource('spatial-data', {
           type: 'geojson',
           data: {
             type: 'FeatureCollection',
-            features: mapData.features
+            features: setores
           }
         });
 
@@ -169,7 +191,7 @@ const Mapa: React.FC = () => {
     } catch (error) {
       console.error("Error adding map source or layers:", error);
     }
-  }, [mapData.features, mapData.loading, styleLoaded]);
+  }, [setores, styleLoaded]);
 
   // Effect para atualizar os estilos quando selectedFeatureId muda
   useEffect(() => {
@@ -217,7 +239,7 @@ const Mapa: React.FC = () => {
   }, [selectedFeatureId, styleLoaded]);
 
   // Function to handle the setor censitario polygon update (keeping it simple)
-  const handleSetorCensitarioUpdate = useCallback((event: Event) => {
+  const handleSetorCensitarioUpdate = (event: Event) => {
     if (!map.current || !styleLoaded) return;
 
     const customEvent = event as CustomEvent;
@@ -307,7 +329,7 @@ const Mapa: React.FC = () => {
     } catch (error) {
       console.error("Error updating setor censitario polygon:", error);
     }
-  }, [styleLoaded]);
+  };
 
   // Listen for the updateSetorCensitarioPolygon event
   useEffect(() => {
@@ -319,8 +341,7 @@ const Mapa: React.FC = () => {
   }, [handleSetorCensitarioUpdate]);
 
   const handleCidadeSelect = (cidadeId: number, coordinates?: [number, number]) => {
-    setSelectedCidade(cidadeId);
-    setSelectedFeatureId(null); // Reset selection when changing city
+    setSelectedFeatureId(null);
     
     if (coordinates && map.current) {
       map.current.flyTo({
@@ -333,12 +354,13 @@ const Mapa: React.FC = () => {
 
   return (
     <MapContainer>
-      <CidadesMenu onCidadeSelect={handleCidadeSelect} selectedCidade={selectedCidade} />
+      <CidadesMenu onCidadeSelect={handleCidadeSelect} />
       <SetorCensitario />
-      {mapData.error && <div className="error-message">{mapData.error}</div>}
+      {setoresError && <div className="error-message">{setoresError}</div>}
       <MapWrapper ref={mapContainer} />
       <div className="map-info">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+        {selectedCidade && ` | Cidade: ${selectedCidade.nome}`}
       </div>
     </MapContainer>
   );

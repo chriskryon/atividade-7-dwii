@@ -4,10 +4,7 @@ export const cidadesFiltradas = [
     "nome": "Campinas",
     "geometry": {
       "type": "Point",
-      "coordinates": [
-        -47.06142,
-        -22.90655
-      ]
+      "coordinates": [-47.06142, -22.90655] as [number, number]
     }
   },
   {
@@ -15,10 +12,7 @@ export const cidadesFiltradas = [
     "nome": "Jacareí",
     "geometry": {
       "type": "Point",
-      "coordinates": [
-        -45.96642,
-        -23.30555
-      ]
+      "coordinates": [-45.96642, -23.30555] as [number, number]
     }
   },
   {
@@ -26,10 +20,7 @@ export const cidadesFiltradas = [
     "nome": "São José dos Campos",
     "geometry": {
       "type": "Point",
-      "coordinates": [
-        -45.88741,
-        -23.17955
-      ]
+      "coordinates": [-45.88741, -23.17955] as [number, number]
     }
   },
   {
@@ -37,10 +28,7 @@ export const cidadesFiltradas = [
     "nome": "Sorocaba",
     "geometry": {
       "type": "Point",
-      "coordinates": [
-        -47.45843,
-        -23.50255
-      ]
+      "coordinates": [-47.45843, -23.50255] as [number, number]
     }
   },
   {
@@ -48,10 +36,7 @@ export const cidadesFiltradas = [
     "nome": "Ribeirão Preto",
     "geometry": {
       "type": "Point",
-      "coordinates": [
-        -47.81042,
-        -21.17854
-      ]
+      "coordinates": [-47.81042, -21.17854] as [number, number]
     }
   },
   {
@@ -59,10 +44,7 @@ export const cidadesFiltradas = [
     "nome": "Piracicaba",
     "geometry": {
       "type": "Point",
-      "coordinates": [
-        -47.64943,
-        -22.72554
-      ]
+      "coordinates": [-47.64943, -22.72554] as [number, number]
     }
   },
   {
@@ -70,10 +52,7 @@ export const cidadesFiltradas = [
     "nome": "São José do Rio Preto",
     "geometry": {
       "type": "Point",
-      "coordinates": [
-        -49.37943,
-        -20.82053
-      ]
+      "coordinates": [-49.37943, -20.82053] as [number, number]
     }
   },
 ];

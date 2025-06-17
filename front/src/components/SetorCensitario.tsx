@@ -1,6 +1,5 @@
 import type React from 'react';
 import { useEffect, useState } from 'react';
-import { censoApi } from '../services/api';
 import { 
   Container,
   CloseButton,
@@ -12,20 +11,11 @@ import {
   NoDataMessage,
   LoadingSpinner
 } from '../styles/setor.style';
-
-interface SectorData {
-  cd_setor: string;
-  situacao: string;
-  area_km2: number;
-  nm_mun: string;
-  geom: string;
-}
+import { useSetor } from '../hooks/useSetor';
 
 const SetorCensitario: React.FC = () => {
-  const [sectorData, setSectorData] = useState<SectorData | null>(null);
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { selectedSetor, loading, error, fetchSetorByClick, clearSelection } = useSetor();
 
   useEffect(() => {
     const handleMapClick = async (event: Event) => {
@@ -33,34 +23,18 @@ const SetorCensitario: React.FC = () => {
       const { lngLat } = customEvent.detail;
       
       if (lngLat) {
-        await fetchSectorData(lngLat.lng, lngLat.lat);
+        setVisible(true);
+        await fetchSetorByClick(lngLat.lng, lngLat.lat);
       }
     };
 
     window.addEventListener('mapClick', handleMapClick);
     return () => window.removeEventListener('mapClick', handleMapClick);
-  }, []);
+  }, [fetchSetorByClick]);
 
-  const fetchSectorData = async (x: number, y: number) => {
-    setLoading(true);
-    setError(null);
-    setVisible(true);
-
-    try {
-      const data = await censoApi.getByPoint(x, y);
-      
-      if (data.message) {
-        setError(data.message);
-        setSectorData(null);
-      } else {
-        setSectorData(data);
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao carregar dados');
-      setSectorData(null);
-    } finally {
-      setLoading(false);
-    }
+  const handleClose = () => {
+    setVisible(false);
+    clearSelection();
   };
 
   const getZoneType = (situacao: string): string => {
@@ -85,7 +59,7 @@ const SetorCensitario: React.FC = () => {
 
   return (
     <Container>
-      <CloseButton onClick={() => setVisible(false)}>×</CloseButton>
+      <CloseButton onClick={handleClose}>×</CloseButton>
       
       {loading && (
         <NoDataMessage>
@@ -100,22 +74,22 @@ const SetorCensitario: React.FC = () => {
         </NoDataMessage>
       )}
 
-      {sectorData && !loading && (
+      {selectedSetor && !loading && (
         <SectorCard>
           <SectorCode>
-            {getSectorCode(sectorData.cd_setor)}
+            {getSectorCode(selectedSetor.cd_setor)}
           </SectorCode>
           
           <ZoneType>
-            Zona {getZoneType(sectorData.situacao)}
+            Zona {getZoneType(selectedSetor.situacao)}
           </ZoneType>
           
           <CityName>
-            {sectorData.nm_mun}
+            {selectedSetor.nm_mun}
           </CityName>
           
           <AreaInfo>
-            {formatArea(sectorData.area_km2)}
+            {formatArea(selectedSetor.area_km2)}
           </AreaInfo>
         </SectorCard>
       )}
