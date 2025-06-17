@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { memo } from 'react';
 import { MenuContainer, MenuTitle, NoticeBanner, SearchButton, StyledSelect } from '../styles/cidades.style';
 import { useCidade } from '../hooks/useCidade';
 
@@ -7,7 +7,7 @@ interface CidadesMenuProps {
   selectedCidade?: number | null;
 }
 
-const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect }) => {
+const CidadesMenu: React.FC<CidadesMenuProps> = memo(({ onCidadeSelect }) => {
   const { selectedCidade, cidades, changeCidade, loading, error, setoresLoading } = useCidade();
 
   const handleSelectChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -60,6 +60,8 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect }) => {
       )}
     </MenuContainer>
   );
-};
+});
+
+CidadesMenu.displayName = 'CidadesMenu';
 
 export default CidadesMenu;

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback, memo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { MapContainer, MapWrapper } from '../styles/MapContainer';
@@ -11,7 +11,7 @@ import { useCidade } from '../hooks/useCidade';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNmNW0iLCJhIjoiY204ZDRyOWIyMGxuMjJyb3g5a2I5djliZyJ9.M5B_cljHLFcGD_HOC4bJdg';
 
-const Mapa: React.FC = () => {
+const Mapa: React.FC = memo(() => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [lng, setLng] = useState(-45.96642);
@@ -22,6 +22,45 @@ const Mapa: React.FC = () => {
   
   const { selectedCidade, setoresError } = useCidade();
   const { setores } = useSetor();
+
+  // Memoize the cidade select handler to prevent re-renders
+  const handleCidadeSelect = useCallback((cidadeId: number, coordinates?: [number, number]) => {
+    setSelectedFeatureId(null);
+    
+    if (coordinates && map.current) {
+      map.current.flyTo({
+        center: coordinates,
+        zoom: 11,
+        essential: true
+      });
+    }
+  }, []);
+
+  // Memoize the polygon click handler
+  const handlePolygonClick = useCallback((e: mapboxgl.MapMouseEvent) => {
+    if (e.features?.[0] && map.current) {
+      const feature = e.features[0];
+      const featureId = feature.id?.toString() || feature.properties?.id || Math.random().toString();
+      
+      console.log('Clicked feature:', feature);
+      console.log('Feature ID:', featureId);
+      
+      // Atualizar o polígono selecionado
+      setSelectedFeatureId(featureId);
+      
+      // Emit custom event for SetorCensitario component
+      const mapClickEvent = new CustomEvent('mapClick', {
+        detail: { lngLat: e.lngLat }
+      });
+      window.dispatchEvent(mapClickEvent);
+      
+      new mapboxgl.Popup()
+        .setLngLat([e.lngLat.lng, e.lngLat.lat])
+        .setHTML(`<h3>${feature.properties?.name || 'Região'}</h3>
+                  <p>${feature.properties?.description || 'Sem descrição disponível'}</p>`)
+        .addTo(map.current);
+    }
+  }, []);
 
   // Initialize map
   useEffect(() => {
@@ -166,32 +205,7 @@ const Mapa: React.FC = () => {
           }
         });
 
-        // Event listeners
-        const handlePolygonClick = (e: mapboxgl.MapMouseEvent) => {
-          if (e.features?.[0] && map.current) {
-            const feature = e.features[0];
-            const featureId = feature.id?.toString() || feature.properties?.id || Math.random().toString();
-            
-            console.log('Clicked feature:', feature);
-            console.log('Feature ID:', featureId);
-            
-            // Atualizar o polígono selecionado
-            setSelectedFeatureId(featureId);
-            
-            // Emit custom event for SetorCensitario component
-            const mapClickEvent = new CustomEvent('mapClick', {
-              detail: { lngLat: e.lngLat }
-            });
-            window.dispatchEvent(mapClickEvent);
-            
-            new mapboxgl.Popup()
-              .setLngLat([e.lngLat.lng, e.lngLat.lat])
-              .setHTML(`<h3>${feature.properties?.name || 'Região'}</h3>
-                        <p>${feature.properties?.description || 'Sem descrição disponível'}</p>`)
-              .addTo(map.current);
-          }
-        };
-
+        // Use the memoized event handler
         map.current.on('click', 'spatial-data-layer', handlePolygonClick);
 
         map.current.on('mouseenter', 'spatial-data-layer', () => {
@@ -209,7 +223,7 @@ const Mapa: React.FC = () => {
     } catch (error) {
       console.error("Error adding map source or layers:", error);
     }
-  }, [setores, styleLoaded]);
+  }, [setores, styleLoaded, handlePolygonClick]);
 
   // Effect para atualizar os estilos quando selectedFeatureId muda
   useEffect(() => {
@@ -358,18 +372,6 @@ const Mapa: React.FC = () => {
     };
   }, [handleSetorCensitarioUpdate]);
 
-  const handleCidadeSelect = (cidadeId: number, coordinates?: [number, number]) => {
-    setSelectedFeatureId(null);
-    
-    if (coordinates && map.current) {
-      map.current.flyTo({
-        center: coordinates,
-        zoom: 11,
-        essential: true
-      });
-    }
-  };
-
   return (
     <MapContainer>
       <CidadesMenu onCidadeSelect={handleCidadeSelect} />
@@ -382,6 +384,8 @@ const Mapa: React.FC = () => {
       </div>
     </MapContainer>
   );
-};
+});
+
+Mapa.displayName = 'Mapa';
 
 export default Mapa;

@@ -89,7 +89,7 @@ export const SetorCensitarioProvider: React.FC<SetorCensitarioProviderProps> = (
 
   const fetchSetorByPoint = async (x: number, y: number): Promise<void> => {
     try {
-      setLoading(true);
+      // Don't set loading to true here to prevent unnecessary re-renders
       setError(null);
       
       const data = await censoService.getByPoint(x, y);
@@ -104,8 +104,6 @@ export const SetorCensitarioProvider: React.FC<SetorCensitarioProviderProps> = (
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao carregar dados do setor');
       setSelectedSetor(null);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -120,10 +118,10 @@ export const SetorCensitarioProvider: React.FC<SetorCensitarioProviderProps> = (
     setError(null);
   };
 
-  // Carregar Jacareí automaticamente quando o contexto for criado
+  // Load Jacareí automatically when the context is created
   useEffect(() => {
     fetchSetoresByCidade('Jacareí');
-  }, []);
+  }, []); // Empty dependency array ensures this only runs once on mount
 
   return (
     <SetorCensitarioContext.Provider value={{

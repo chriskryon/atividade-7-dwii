@@ -1,5 +1,5 @@
 import type React from 'react';
-import { createContext, useState, useContext, useEffect, type ReactNode } from 'react'
+import { createContext, useState, useContext, type ReactNode } from 'react'
 import type { MapData, MapContextType } from '../types/map.types';
 import * as wkt from 'wellknown';
 import { censoService } from '../services';
@@ -98,11 +98,6 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
   const updateSelectedCity = (cityName: string) => {
     setSelectedCity(cityName);
   };
-
-  // Inicializar com Jacareí carregando os dados automaticamente
-  useEffect(() => {
-    fetchCensusData('Jacareí');
-  }, []);
 
   return (
     <MapContext.Provider value={{ mapData, fetchMapData, setMapData, selectedCity, fetchCensusData, updateSelectedCity }}>
