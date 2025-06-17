@@ -1,4 +1,5 @@
-export const cidadesFiltradas = [
+
+export const cidadesAtividade = [
   {
     "id": 969,
     "nome": "Campinas",
@@ -56,3 +57,7 @@ export const cidadesFiltradas = [
     }
   },
 ];
+
+export const cidadesFiltradas = [...cidadesAtividade].sort((a, b) =>
+  a.nome.localeCompare(b.nome)
+);

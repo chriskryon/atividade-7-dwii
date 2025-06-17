@@ -4,6 +4,7 @@ export const MapContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
   .map-info {
     position: absolute;
@@ -47,51 +48,59 @@ export const MapContainer = styled.div`
   }
 
   .mapboxgl-popup-content {
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-width: 200px;
   }
 
   .mapboxgl-popup-close-button {
-    font-size: 20px;
-    color: #666;
+    font-size: 18px;
+    color: #8e8e93;
     padding: 8px;
-    line-height: 0.5;
-    background: rgba(240, 240, 240, 0.5);
+    line-height: 1;
+    background: rgba(142, 142, 147, 0.12);
     border-radius: 50%;
-    margin: 6px;
-    width: 24px;
-    height: 24px;
+    margin: 8px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.05);
-      color: #333;
-      transform: rotate(90deg);
+      background: rgba(142, 142, 147, 0.2);
+      color: #1d1d1f;
+      transform: scale(1.1);
     }
   }
 
   .mapboxgl-popup-content h3 {
-    margin-top: 0;
-    margin-bottom: 8px;
-    color: #111;
-    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #1d1d1f;
+    font-weight: 700;
     font-size: 18px;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.4px;
+    line-height: 1.2;
   }
 
   .mapboxgl-popup-content p {
     margin: 8px 0;
-    color: #444;
+    color: #424245;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.4;
+    font-weight: 400;
+  }
+
+  .mapboxgl-popup-tip {
+    border-top-color: rgba(255, 255, 255, 0.95) !important;
   }
 `;
 
@@ -101,4 +110,6 @@ export const MapWrapper = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
+  border-radius: 0;
+  overflow: hidden;
 `;

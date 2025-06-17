@@ -64,13 +64,13 @@ const SetorCensitario: React.FC = () => {
       {loading && (
         <NoDataMessage>
           <LoadingSpinner />
-          <div style={{ marginTop: '8px' }}>Carregando...</div>
+          <div style={{ marginTop: '12px', fontWeight: 600 }}>Carregando setor...</div>
         </NoDataMessage>
       )}
 
       {error && (
         <NoDataMessage>
-          <div style={{ color: '#dc2626' }}>⚠️ {error}</div>
+          <div style={{ color: '#ff3b30', fontWeight: 600 }}>⚠️ {error}</div>
         </NoDataMessage>
       )}
 
@@ -89,7 +89,7 @@ const SetorCensitario: React.FC = () => {
           </CityName>
           
           <AreaInfo>
-            {formatArea(selectedSetor.area_km2)}
+            Área: {formatArea(selectedSetor.area_km2)}
           </AreaInfo>
         </SectorCard>
       )}

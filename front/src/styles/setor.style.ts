@@ -2,126 +2,146 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 280px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 16px;
-  padding: 20px;
+  bottom: 24px;
+  right: 24px;
+  width: 220px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border-radius: 24px;
+  padding: 14px;
   z-index: 10;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    0 1px 0 rgba(255, 255, 255, 0.8) inset;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   
   @keyframes slideIn {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(20px) scale(0.95);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
   }
 `;
 
 export const CloseButton = styled.button`
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 24px;
-  height: 24px;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(142, 142, 147, 0.12);
   border: none;
-  font-size: 14px;
-  color: #666;
+  font-size: 16px;
+  color: #8e8e93;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 500;
   
   &:hover {
-    background: rgba(0, 0, 0, 0.1);
-    color: #333;
+    background: rgba(142, 142, 147, 0.2);
+    color: #1d1d1f;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
 
 export const SectorCard = styled.div`
   text-align: center;
+  padding-top: 8px;
 `;
 
 export const SectorCode = styled.div`
-  font-size: 24px;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-size: 32px;
+  font-weight: 800;
+  color: #1d1d1f;
   margin-bottom: 8px;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 `;
 
 export const ZoneType = styled.div`
   font-size: 13px;
-  font-weight: 500;
-  color: #666;
+  font-weight: 600;
+  color: #8e8e93;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 16px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
   position: relative;
   
   &::before {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 24px;
-    height: 1px;
-    background: #ddd;
+    width: 32px;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 2px;
   }
 `;
 
 export const CityName = styled.div`
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  margin-top: 16px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-top: 20px;
+  margin-bottom: 4px;
+  letter-spacing: -0.4px;
+  line-height: 1.2;
 `;
 
 export const AreaInfo = styled.div`
-  font-size: 12px;
-  color: #888;
-  margin-top: 4px;
+  font-size: 14px;
+  color: #424245;
+  font-weight: 500;
+  margin-top: 8px;
+  opacity: 0.8;
 `;
 
 export const NoDataMessage = styled.div`
-  padding: 20px;
+  padding: 24px;
   text-align: center;
-  color: #666;
-  font-size: 14px;
-  background: rgba(248, 248, 248, 0.5);
-  border-radius: 12px;
+  color: #424245;
+  font-size: 15px;
+  background: rgba(248, 248, 248, 0.6);
+  border-radius: 16px;
+  font-weight: 500;
+  line-height: 1.4;
   
   &::before {
     content: '📍';
     display: block;
-    font-size: 20px;
-    margin-bottom: 8px;
-    opacity: 0.5;
+    font-size: 24px;
+    margin-bottom: 12px;
+    opacity: 0.6;
   }
 `;
 
 export const LoadingSpinner = styled.div`
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #666;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-top: 2px solid #667eea;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   

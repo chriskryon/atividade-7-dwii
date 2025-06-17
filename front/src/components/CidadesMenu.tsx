@@ -40,14 +40,22 @@ const CidadesMenu: React.FC<CidadesMenuProps> = ({ onCidadeSelect }) => {
       </StyledSelect>
       
       {(loading || setoresLoading) && (
-        <NoticeBanner>
-          {loading ? 'Carregando cidades...' : 'Buscando setores...'}
+        <NoticeBanner style={{ 
+          background: 'rgba(102, 126, 234, 0.1)',
+          border: '1px solid rgba(102, 126, 234, 0.2)',
+          color: '#667eea'
+        }}>
+          {loading ? '🔍 Carregando cidades...' : '📍 Buscando setores censitários...'}
         </NoticeBanner>
       )}
       
       {error && (
-        <NoticeBanner>
-          {error}
+        <NoticeBanner style={{
+          background: 'rgba(255, 59, 48, 0.1)',
+          border: '1px solid rgba(255, 59, 48, 0.2)',
+          color: '#d70015'
+        }}>
+          ⚠️ {error}
         </NoticeBanner>
       )}
     </MenuContainer>
